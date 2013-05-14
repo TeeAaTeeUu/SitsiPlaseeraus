@@ -77,6 +77,7 @@ public class RandomGeneratorTest {
     public static void tulostaSitsaajat(Poyta table) {
         System.out.println("\n" + "Sitsaajat" + "\n");
         boolean even = true;
+        
         for (Sitsaaja sitsaaja : table.getSitsaajat()) {
             if (even) {
                 System.out.print(sitsaaja.getNimi() + " : ");

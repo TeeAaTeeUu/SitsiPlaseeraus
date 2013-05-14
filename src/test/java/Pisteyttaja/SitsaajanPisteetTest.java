@@ -80,14 +80,10 @@ public class SitsaajanPisteetTest {
         this.pisteet = new SitsaajanPisteet(heikki, table);
         assertEquals(4, this.pisteet.palautaPisteet(), 0.01);
         
-        System.out.println("eka");
-        
         heikki.setYhteys(milla, 1);
         
         this.pisteet = new SitsaajanPisteet(heikki, table);
         assertEquals(4 + 1 / Math.hypot(1, 1), this.pisteet.palautaPisteet() , 0.01);
-        
-        System.out.println("toka");
         
         heikki.setYhteys(hilla, 4);
         
@@ -173,33 +169,23 @@ public class SitsaajanPisteetTest {
         
         nukke.setYhteys(heikki, 3);
         
-        System.out.println("moiu");
-        
         this.pisteet = new SitsaajanPisteet(nukke, table);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2), this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(testi, -5);
         
-        System.out.println("toinn");
-        
         this.pisteet = new SitsaajanPisteet(nukke, table);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2) - 5, this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(tyyppi, -3);
-
-        System.out.println("kole");
         
         this.pisteet = new SitsaajanPisteet(nukke, table);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2) - 5 - 3.0, this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(vaan, -2);
         
-        System.out.println("nelh");
-        
         this.pisteet = new SitsaajanPisteet(nukke, table);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2) - 5 - 3.0 - 2.0 / Math.hypot(1, 3), this.pisteet.palautaPisteet() , 0.01);
-        
-        System.out.println("viis");
         
         nukke.setYhteys(pallo, -5);
         

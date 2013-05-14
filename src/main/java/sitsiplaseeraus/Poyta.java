@@ -2,6 +2,7 @@ package sitsiplaseeraus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Poyta {
 
@@ -14,17 +15,44 @@ public class Poyta {
     }
 
     public ArrayList<Sitsaaja> getSitsaajat() {
-        return this.sitsaajat;
+        ArrayList<Sitsaaja> sitsaajat = new ArrayList<Sitsaaja>();
+
+        for (int i = 0; i < this.sitsaajienMaara(); i++) {
+            for (Map.Entry paikat : this.getPaikat().entrySet()) {
+                if((Integer) paikat.getValue() == i) {
+                    sitsaajat.add((Sitsaaja) paikat.getKey());
+                }
+            }
+        }
+        return sitsaajat;
     }
-    
+
     public HashMap<Sitsaaja, Integer> getPaikat() {
         return this.paikat;
+    }
+
+    public int getPaikka(Sitsaaja sitsaaja) {
+        if (this.paikat.containsKey(sitsaaja)) {
+            return this.paikat.get(sitsaaja);
+        } else {
+            return -1;
+        }
+    }
+
+    public boolean setPaikka(Sitsaaja sitsaaja, int paikka) {
+        Object old = this.paikat.put(sitsaaja, paikka);
+        if (old == null) {
+            this.paikat.put(sitsaaja, null);
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public int sitsaajienMaara() {
         return this.sitsaajat.size();
     }
-    
+
     public void addSitsaaja(String nimi) {
         addSitsaaja(nimi, this.sitsaajienMaara());
     }
