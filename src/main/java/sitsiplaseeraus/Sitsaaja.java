@@ -49,4 +49,17 @@ public class Sitsaaja {
         }
         return yhteyksienMaara;
     }
+
+    public Sitsaaja palautaTarkeinKanssaSitsaaja() {
+        Sitsaaja tarkein = this;
+        int tarkeimmallaPisteita = -5;
+        
+        for (Map.Entry<Sitsaaja, Integer> yhteys : this.palautaYhteydet().entrySet()) {
+            if(yhteys.getValue() > tarkeimmallaPisteita) {
+                tarkein = yhteys.getKey();
+                tarkeimmallaPisteita = yhteys.getValue();
+            }
+        }
+        return tarkein;
+    }
 }

@@ -1,20 +1,17 @@
 package jarjestelija;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import sitsiplaseeraus.Poyta;
 import sitsiplaseeraus.random.RandomGenerator;
 
-public class optimoijaTest {
+public class OptimoijaTest {
     private Poyta table;
-    private optimoija optimoija;
+    private Optimoija optimoija;
     private RandomGenerator random;
     
-    public optimoijaTest() {
+    public OptimoijaTest() {
     }
     
     @Before
@@ -22,17 +19,23 @@ public class optimoijaTest {
         this.table = new Poyta();
         
         this.random = new RandomGenerator();
-        this.random.taytaRandomDatalla(16, 50, this.table);
+        this.random.taytaRandomDatalla(80, 80*5, this.table);
         
-        this.optimoija = new optimoija(this.table);
+        this.optimoija = new Optimoija(this.table);
     }
 
     @Test
     public void testOptimoiIstumapaikat() {
         double pisteet = this.optimoija.getPisteet().palautaPisteet();
         
+        System.out.println("random alun pisteet: " + pisteet);
+        
+        RandomGenerator.tulostaSitsaajat(table);
+        
         this.optimoija.optimoiIstumapaikat(10);
         
         assertTrue(this.optimoija.getPisteet().palautaPisteet() > pisteet);
+        
+        RandomGenerator.tulostaYhteydet(table);
     }
 }
