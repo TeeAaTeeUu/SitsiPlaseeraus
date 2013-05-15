@@ -50,7 +50,7 @@ public class SitsaajanPisteet {
     private void alustaMuuttujat() {
         this.yhteydet = this.sitsaaja.palautaYhteydet();
         this.paikat = this.table.getPaikat();
-        this.paikka = this.paikat.get(sitsaaja);
+        this.paikka = this.paikat.get(this.sitsaaja);
     }
 
     private double palautaPisteet(int arvo, int kohteidenErotus) {

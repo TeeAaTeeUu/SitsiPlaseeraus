@@ -19,6 +19,10 @@ public class Jarjestaja {
     public Poyta getTable() {
         return table;
     }
+    
+    public void setTable(Poyta table) {
+        this.table = table;
+    }
 
     protected boolean vaihdaRandom() {
         tokaSitsaaja = null;
@@ -42,9 +46,6 @@ public class Jarjestaja {
     private boolean vaihdaPaikat() {
         ekaPaikka = this.table.getPaikka(ekaSitsaaja);
         tokaPaikka = this.table.getPaikka(tokaSitsaaja);
-
-        System.out.println(ekaSitsaaja.getNimi() + " " + ekaPaikka);
-        System.out.println(tokaSitsaaja.getNimi() + " " + tokaPaikka);
 
         if (ekaPaikka == -1 || tokaPaikka == -1) {
             return false;

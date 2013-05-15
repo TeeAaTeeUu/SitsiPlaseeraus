@@ -44,8 +44,8 @@ public class SitsaajanPisteetTest {
         }
         assertTrue(luku != 0);
         
-        RandomGeneratorTest.tulostaSitsaajat(table);
-        RandomGeneratorTest.tulostaYhteydet(table);
+        RandomGenerator.tulostaSitsaajat(table);
+        RandomGenerator.tulostaYhteydet(table);
         System.out.println("\n" + "pisteet " + this.pisteet.palautaPisteet() + " sitsaajalta " + this.sitsaaja.getNimi() + "\n");
     }
     

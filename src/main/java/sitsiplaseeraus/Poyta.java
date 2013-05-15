@@ -30,6 +30,11 @@ public class Poyta {
     public HashMap<Sitsaaja, Integer> getPaikat() {
         return this.paikat;
     }
+    
+    public void setPaikat(HashMap<Sitsaaja, Integer> uusi) {
+        this.paikat.clear();
+        this.paikat.putAll(uusi);
+    }
 
     public int getPaikka(Sitsaaja sitsaaja) {
         if (this.paikat.containsKey(sitsaaja)) {

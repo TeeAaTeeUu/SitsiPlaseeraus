@@ -23,10 +23,10 @@ public class JarjestajaTest {
     
     @Test
     public void vaihtaaSitsaajienPaikkojaKaatumatta() {
-        RandomGeneratorTest.tulostaSitsaajat(this.jarjestaja.getTable());
+        RandomGenerator.tulostaSitsaajat(this.jarjestaja.getTable());
         
         assertEquals(true, this.jarjestaja.vaihdaRandom());
         
-        RandomGeneratorTest.tulostaSitsaajat(this.jarjestaja.getTable());
+        RandomGenerator.tulostaSitsaajat(this.jarjestaja.getTable());
     }
 }
