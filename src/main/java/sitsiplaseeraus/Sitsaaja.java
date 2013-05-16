@@ -9,6 +9,7 @@ public class Sitsaaja {
     private HashMap<Sitsaaja, Integer> yhteydet;
     private int paikka;
     private int poyta;
+    private boolean mies;
 
     public Sitsaaja(String nimi, int poyta, int paikka) {
         this.setNimi(nimi);
@@ -40,6 +41,14 @@ public class Sitsaaja {
 
     public void setNimi(String nimi) {
         this.nimi = nimi;
+    }
+
+    public boolean isMies() {
+        return mies;
+    }
+
+    public void setMies(boolean mies) {
+        this.mies = mies;
     }
     
     public void vaihdaPaikka(int poyta, int paikka) {

@@ -11,6 +11,8 @@ public class Main {
         
         random.taytaRandomDatalla(80, 80*10, sitsit);
         
+        RandomGenerator.tulostaSitsaajat(sitsit);
+        
         Optimoija optimoija = new Optimoija(sitsit);
         optimoija.optimoiIstumapaikat(1000);
     }

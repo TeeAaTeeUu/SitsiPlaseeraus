@@ -78,7 +78,8 @@ public class Optimoija {
             this.muutosOnTapahtunut = false;
         } else {
             this.muutosOnTapahtunut = true;
-            System.out.println(System.currentTimeMillis() + "\t" + this.pisteet.palautaPisteet());
+            System.out.print(System.currentTimeMillis() + "\t" + this.pisteet.palautaPisteet() + "\t");
+            System.out.println((int) (System.currentTimeMillis() - this.aika) / 1000 + " sekunttia kulunut");
         }
     }
 
