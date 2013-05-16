@@ -2,52 +2,43 @@ package jarjestelija;
 
 import Pisteyttaja.Pisteet;
 import java.util.HashMap;
-import sitsiplaseeraus.Poyta;
 import sitsiplaseeraus.Sitsaaja;
+import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.random.Random;
 import sitsiplaseeraus.random.RandomGenerator;
 
 public class Optimoija {
 
     private Jarjestaja jarjestelija;
-    private Poyta table;
+    private Sitsit sitsit;
     private Pisteet pisteet;
     private long aika;
     private double VanhassaPisteita;
-    private HashMap<Sitsaaja, Integer> vanha;
+    private HashMap<Sitsaaja, Integer> vanhatPaikat;
+    private HashMap<Sitsaaja, Integer> vanhatPoydat;
     private final int sitsaajienMaara;
-    private long edellinenAika;
+    private boolean muutosOnTapahtunut;
 
-    public Optimoija(Poyta table) {
-        this.table = table;
+    public Optimoija(Sitsit sitsit) {
+        this.sitsit = sitsit;
 
-        this.jarjestelija = new Jarjestaja();
-        this.jarjestelija.setTable(this.table);
+        this.jarjestelija = new Jarjestaja(this.sitsit);
 
-        this.pisteet = new Pisteet(this.table);
-        this.vanha = new HashMap<Sitsaaja, Integer>();
-        
-        this.sitsaajienMaara = this.table.kuinkaMontaSitsaajaa();
+        this.pisteet = new Pisteet(this.sitsit);
+        this.vanhatPoydat = new HashMap<Sitsaaja, Integer>();
+
+        this.sitsaajienMaara = this.sitsit.sitsaajienMaara();
     }
 
     public void optimoiIstumapaikat(int sekunttia) {
         this.aika = System.currentTimeMillis();
-        this.edellinenAika = this.aika;
 
         long i = 0;
         while (aika + 1000 * sekunttia > System.currentTimeMillis()) {
             this.kokeileVaihtoa();
             i++;
-            if (edellinenAika + 1000 < System.currentTimeMillis()) {
-                RandomGenerator.tulostaSitsaajat(this.table);
-                System.out.println(this.VanhassaPisteita = this.pisteet.palautaPisteet());
-                
-                this.edellinenAika = System.currentTimeMillis();
-            }
         }
-        RandomGenerator.tulostaSitsaajat(this.table);
-        System.out.println(this.pisteet.palautaPisteet());
-        System.out.println("\n" + "kuinka monta kertaa kokeiltiin paikkojen vaihtoa: " + i);
+        this.tulostaLoppuTietoja(i);
     }
 
     public Pisteet getPisteet() {
@@ -55,18 +46,45 @@ public class Optimoija {
     }
 
     private void kokeileVaihtoa() {
-        this.VanhassaPisteita = this.pisteet.palautaPisteet();
-
-        this.vanha.clear();
-        this.vanha.putAll(this.table.getPaikat());
+        this.alustaVaihtoaVarten();
 
         int kuinkaMontaVaihtoa = Random.luo(this.sitsaajienMaara, 1);
         for (int i = 0; i <= kuinkaMontaVaihtoa; i++) {
             this.jarjestelija.vaihdaRandom();
         }
 
+        this.tulostaOnnistumisviestiTaiPalautaVanha();
+    }
+
+    private void tulostaLoppuTietoja(long kuinkaMontaKokeiltiin) {
+        RandomGenerator.tulostaSitsaajat(this.sitsit);
+
+        System.out.println(this.pisteet.palautaPisteet());
+        System.out.println("\n" + "kuinka monta kertaa kokeiltiin paikkojen vaihtoa: " + kuinkaMontaKokeiltiin);
+    }
+
+    private void alustaVaihtoaVarten() {
+        if (this.muutosOnTapahtunut = true) {
+            this.VanhassaPisteita = this.pisteet.palautaPisteet();
+            this.vanhatPaikat = this.sitsit.palautaPaikat();
+            this.vanhatPoydat = this.sitsit.palautaPoydat();
+        }
+    }
+
+    private void tulostaOnnistumisviestiTaiPalautaVanha() {
         if (this.pisteet.palautaPisteet() < this.VanhassaPisteita) {
-            this.table.setPaikat(this.vanha);
+            this.palautaVanhat();
+            
+            this.muutosOnTapahtunut = false;
+        } else {
+            this.muutosOnTapahtunut = true;
+            System.out.println(System.currentTimeMillis() + "\t" + this.pisteet.palautaPisteet());
+        }
+    }
+
+    private void palautaVanhat() {
+        for (Sitsaaja sitsaaja : this.sitsit.getSitsaajat()) {
+            sitsaaja.vaihdaPaikka(this.vanhatPoydat.get(sitsaaja), this.vanhatPaikat.get(sitsaaja));
         }
     }
 }

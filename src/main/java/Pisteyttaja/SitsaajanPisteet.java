@@ -2,23 +2,23 @@ package Pisteyttaja;
 
 import java.util.HashMap;
 import java.util.Map;
-import sitsiplaseeraus.Poyta;
 import sitsiplaseeraus.Sitsaaja;
 
 public class SitsaajanPisteet {
 
     private Sitsaaja sitsaaja;
     private int paikka;
+    private int poyta;
     private HashMap<Sitsaaja, Integer> yhteydet;
-    private Poyta table;
-    private HashMap<Sitsaaja, Integer> paikat;
     private int kohdeSitsaajanPaikka;
+    private Sitsaaja kohdeSitsaaja;
+    private int kohdeSitsaajanPoyta;
     private int kohteidenErotus;
     private boolean onYhteyksia;
+    private int arvo;
 
-    protected SitsaajanPisteet(Sitsaaja sitsaaja, Poyta table) {
+    protected SitsaajanPisteet(Sitsaaja sitsaaja) {
         this.sitsaaja = sitsaaja;
-        this.table = table;
         this.onYhteyksia = false;
     }
 
@@ -26,19 +26,20 @@ public class SitsaajanPisteet {
         alustaMuuttujat();
 
         double pisteet = 0.0;
-        double temp = 0.0;
         for (Map.Entry yhteys : yhteydet.entrySet()) {
-            this.kohdeSitsaajanPaikka = paikat.get((Sitsaaja) yhteys.getKey());
-
             this.onYhteyksia = true;
 
-            int arvo = (Integer) yhteys.getValue();
-            this.kohteidenErotus = this.paikka - this.kohdeSitsaajanPaikka;
+            this.kohdeSitsaaja = (Sitsaaja) yhteys.getKey();
+            this.kohdeSitsaajanPaikka = this.kohdeSitsaaja.getPaikka();
+            this.kohdeSitsaajanPoyta = this.kohdeSitsaaja.getPoyta();
 
-            temp = this.palautaPisteet(arvo, kohteidenErotus);
-//            System.out.println("paikka: " + this.paikka + " arvo: " + arvo + " kohteiden erotus: " + kohteidenErotus + " kohteen paikka: " + this.kohdeSitsaajanPaikka + " pisteet: " + temp);
+            if (this.poyta == this.kohdeSitsaajanPoyta) {
+                this.arvo = (Integer) yhteys.getValue();
 
-            pisteet += temp;
+                this.kohteidenErotus = this.paikka - this.kohdeSitsaajanPaikka;
+
+                pisteet += this.palautaPisteet(arvo, kohteidenErotus, this.paikka);
+            }
         }
         return pisteet;
     }
@@ -49,12 +50,12 @@ public class SitsaajanPisteet {
 
     private void alustaMuuttujat() {
         this.yhteydet = this.sitsaaja.palautaYhteydet();
-        this.paikat = this.table.getPaikat();
-        this.paikka = this.paikat.get(this.sitsaaja);
+        this.paikka = this.sitsaaja.getPaikka();
+        this.poyta = this.sitsaaja.getPoyta();
     }
 
-    private double palautaPisteet(int arvo, int kohteidenErotus) {
-        if (paikkaOnVasemmalla() == true) {
+    private static double palautaPisteet(int arvo, int kohteidenErotus, int paikka) {
+        if (paikkaOnVasemmalla(paikka) == true) {
             return pisteetKunPaikkaOnVasemmalla(kohteidenErotus, arvo);
         } else {
             return pisteetKunPaikkaOnOikealla(kohteidenErotus, arvo);
@@ -62,15 +63,15 @@ public class SitsaajanPisteet {
 
     }
 
-    private boolean paikkaOnVasemmalla() {
-        return this.paikka % 2 == 0;
+    private static boolean paikkaOnVasemmalla(int paikka) {
+        return paikka % 2 == 0;
     }
 
-    private boolean kohdeOnSamallaPuolella(int kohteidenErotus) {
+    private static boolean kohdeOnSamallaPuolella(int kohteidenErotus) {
         return Math.abs(kohteidenErotus) % 2 == 0;
     }
 
-    private double pisteetKunPaikkaOnVasemmalla(int kohteidenErotus, int arvo) {
+    private static double pisteetKunPaikkaOnVasemmalla(int kohteidenErotus, int arvo) {
         if (kohdeOnSamallaPuolella(kohteidenErotus) == true) {
             return 1.0 * arvo / Math.abs(kohteidenErotus / 2);
         } else {
@@ -82,7 +83,7 @@ public class SitsaajanPisteet {
         }
     }
 
-    private double pisteetKunPaikkaOnOikealla(int kohteidenErotus, int arvo) {
+    private static double pisteetKunPaikkaOnOikealla(int kohteidenErotus, int arvo) {
         if (kohdeOnSamallaPuolella(kohteidenErotus) == true) {
             return 1.0 * arvo / Math.abs(kohteidenErotus / 2);
         } else {

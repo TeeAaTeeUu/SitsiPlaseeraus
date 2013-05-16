@@ -8,69 +8,64 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sitsiplaseeraus.Poyta;
 import sitsiplaseeraus.Sitsaaja;
+import sitsiplaseeraus.Sitsit;
 
 public class RandomGeneratorTest {
 
     private Jarjestaja jarjestaja;
     private RandomGenerator random;
-    private Poyta table;
+    private Sitsit Sitsit;
 
     public RandomGeneratorTest() {
     }
 
     @Before
     public void setUp() {
-        this.jarjestaja = new Jarjestaja();
-        this.table = jarjestaja.getTable();
+        this.Sitsit = new Sitsit(3);
+        this.jarjestaja = new Jarjestaja(Sitsit);
         this.random = new RandomGenerator();
     }
-    
+
     @Test
     public void testPalauttaaEriNimia() throws FileNotFoundException, IOException {
         RandomGenerator instance = new RandomGenerator();
-        
+
         String result1 = instance.randomNimi();
         System.out.println(result1);
-        
+
         String result2 = instance.randomNimi();
         System.out.println(result2);
-        
+
         assertEquals(false, result1.equals(result2));
     }
 
     @Test
     public void randomDatanLisaysTuottaaJotain() {
-        this.random.taytaRandomDatalla(16, 40, this.table);
+        this.random.taytaRandomDatalla(16, 40, this.Sitsit);
 
-//        tulostaSitsaajat();
-//        tulostaYhteydet();
-
-        assertTrue(table.getSitsaaja(7).getNimi().length() >= 3);
+        assertTrue(Sitsit.getSitsaaja(7).getNimi().length() >= 3);
     }
 
     @Test
     public void randomDatanLisaysTuottaaOikeanMaaranSitsaajia() {
-        this.random.taytaRandomDatalla(50, 300, table);
+        this.random.taytaRandomDatalla(50, 300, Sitsit);
 
-//        tulostaSitsaajat(table);
-//        tulostaYhteydet(table);
-
-        assertEquals(50, table.sitsaajienMaara());
+        assertEquals(50, Sitsit.sitsaajienMaara());
     }
 
     @Test
     public void randomDatanLisaysToimiiMyosSarjatuotantonaSuuressaMittakaavassa() {
         int monesko = 0;
         for (int i = 0; i < 1000; i++) {
-            this.jarjestaja = new Jarjestaja();
-            this.table = jarjestaja.getTable();
-            this.random = new RandomGenerator();
-            this.random.taytaRandomDatalla(200, 5000, table);
+            this.Sitsit = new Sitsit(3);
+            this.jarjestaja = new Jarjestaja(Sitsit);
             
-            assertEquals(5000, table.yhteyksienMaara());
-            assertEquals(200, table.sitsaajienMaara());
+            this.random = new RandomGenerator();
+            this.random.taytaRandomDatalla(200, 5000, Sitsit);
+
+            assertEquals(5000, Sitsit.yhteyksienMaara());
+            assertEquals(200, Sitsit.sitsaajienMaara());
         }
     }
 }

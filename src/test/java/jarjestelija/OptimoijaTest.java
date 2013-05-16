@@ -3,11 +3,11 @@ package jarjestelija;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sitsiplaseeraus.Poyta;
+import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.random.RandomGenerator;
 
 public class OptimoijaTest {
-    private Poyta table;
+    private Sitsit sitsit;
     private Optimoija optimoija;
     private RandomGenerator random;
     
@@ -16,12 +16,12 @@ public class OptimoijaTest {
     
     @Before
     public void setUp() {
-        this.table = new Poyta();
+        this.sitsit = new Sitsit(3);
         
         this.random = new RandomGenerator();
-        this.random.taytaRandomDatalla(80, 80*5, this.table);
+        this.random.taytaRandomDatalla(80, 80*5, this.sitsit);
         
-        this.optimoija = new Optimoija(this.table);
+        this.optimoija = new Optimoija(this.sitsit);
     }
 
     @Test
@@ -30,12 +30,12 @@ public class OptimoijaTest {
         
         System.out.println("random alun pisteet: " + pisteet);
         
-        RandomGenerator.tulostaSitsaajat(table);
+        RandomGenerator.tulostaSitsaajat(sitsit);
         
         this.optimoija.optimoiIstumapaikat(10);
         
         assertTrue(this.optimoija.getPisteet().palautaPisteet() > pisteet);
         
-        RandomGenerator.tulostaYhteydet(table);
+        RandomGenerator.tulostaYhteydet(sitsit);
     }
 }

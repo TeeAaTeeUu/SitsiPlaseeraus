@@ -3,16 +3,14 @@ package Pisteyttaja;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sitsiplaseeraus.Poyta;
+import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.Sitsaaja;
-import sitsiplaseeraus.random.Random;
 import sitsiplaseeraus.random.RandomGenerator;
-import sitsiplaseeraus.random.RandomGeneratorTest;
 
 public class PisteetTest {
 
     private RandomGenerator random;
-    private Poyta table;
+    private Sitsit sitsit;
     private Sitsaaja sitsaaja;
     private Pisteet pisteet;
 
@@ -22,25 +20,25 @@ public class PisteetTest {
     @Before
     public void setUp() {
         this.random = new RandomGenerator();
-        this.table = new Poyta();
+        this.sitsit = new Sitsit(1);
     }
 
     @Test
     public void testPalautaPisteetToimii() {
-        double luku = 0;
-
         for (int i = 0; i < 1000; i++) {
-            this.table = new Poyta();
-            random.taytaRandomDatalla(10, 30, this.table);
+            double luku = 0.0;
+            
+            this.sitsit = new Sitsit(3);
+            random.taytaRandomDatalla(30, 30*10, this.sitsit);
 
-            this.pisteet = new Pisteet(this.table);
+            this.pisteet = new Pisteet(this.sitsit);
             double pisteet = this.pisteet.palautaPisteet();
             if (pisteet != 0) {
                 luku = pisteet;
             }
 
             assertTrue(this.pisteet.onkoYhteyksia());
-            assertTrue(luku != 0);
+            assertTrue(luku != 0.0);
         }
     }
 }

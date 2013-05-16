@@ -7,10 +7,31 @@ public class Sitsaaja {
 
     private String nimi;
     private HashMap<Sitsaaja, Integer> yhteydet;
+    private int paikka;
+    private int poyta;
 
-    public Sitsaaja(String nimi) {
+    public Sitsaaja(String nimi, int poyta, int paikka) {
         this.setNimi(nimi);
+        this.setPoyta(poyta);
+        this.setPaikka(paikka);
+        
         this.yhteydet = new HashMap<Sitsaaja, Integer>();
+    }
+    
+    public int getPaikka() {
+        return paikka;
+    }
+
+    public void setPaikka(int paikka) {
+        this.paikka = paikka;
+    }
+
+    public int getPoyta() {
+        return poyta;
+    }
+
+    public void setPoyta(int poyta) {
+        this.poyta = poyta;
     }
 
     public String getNimi() {
@@ -19,6 +40,11 @@ public class Sitsaaja {
 
     public void setNimi(String nimi) {
         this.nimi = nimi;
+    }
+    
+    public void vaihdaPaikka(int poyta, int paikka) {
+        this.setPoyta(poyta);
+        this.setPaikka(paikka);
     }
 
     public boolean setYhteys(Sitsaaja sitsaaja, int arvo) {
@@ -42,7 +68,7 @@ public class Sitsaaja {
         return this.yhteydet;
     }
     
-    public int palautaYhteyksienMaara() {
+    public int yhteyksienMaara() {
         int yhteyksienMaara = 0;
         for (Map.Entry yhteys : this.yhteydet.entrySet()) {
             yhteyksienMaara++;
@@ -50,16 +76,16 @@ public class Sitsaaja {
         return yhteyksienMaara;
     }
 
-    public Sitsaaja palautaTarkeinKanssaSitsaaja() {
-        Sitsaaja tarkein = this;
-        int tarkeimmallaPisteita = -5;
-        
-        for (Map.Entry<Sitsaaja, Integer> yhteys : this.palautaYhteydet().entrySet()) {
-            if(yhteys.getValue() > tarkeimmallaPisteita) {
-                tarkein = yhteys.getKey();
-                tarkeimmallaPisteita = yhteys.getValue();
-            }
-        }
-        return tarkein;
-    }
+//    public Sitsaaja palautaTarkeinKanssaSitsaaja() {
+//        Sitsaaja tarkein = this;
+//        int tarkeimmallaPisteita = -5;
+//        
+//        for (Map.Entry<Sitsaaja, Integer> yhteys : this.palautaYhteydet().entrySet()) {
+//            if(yhteys.getValue() > tarkeimmallaPisteita) {
+//                tarkein = yhteys.getKey();
+//                tarkeimmallaPisteita = yhteys.getValue();
+//            }
+//        }
+//        return tarkein;
+//    }
 }

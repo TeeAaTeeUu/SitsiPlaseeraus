@@ -1,15 +1,15 @@
 package sitsiplaseeraus.random;
 
 import java.util.ArrayList;
-import sitsiplaseeraus.Poyta;
 import sitsiplaseeraus.Sitsaaja;
+import sitsiplaseeraus.Sitsit;
 
 class Yhteydet {
 
-    protected static void lisaaYhteyksia(int montakoYhteytta, Poyta table) {
-        ArrayList<Sitsaaja> sitsaajat = table.getSitsaajat();
-        if (table.yhteyksienMaara() > 0) {
-            luoRandomYhteyksia(montakoYhteytta, table);
+    protected static void lisaaYhteyksia(int montakoYhteytta, Sitsit sitsit) {
+        ArrayList<Sitsaaja> sitsaajat = sitsit.getSitsaajat();
+        if (sitsit.yhteyksienMaara() > 0) {
+            luoRandomYhteyksia(montakoYhteytta, sitsit);
             return;
         }
         int lisatytYhteydet = 0;
@@ -29,14 +29,14 @@ class Yhteydet {
         return nytLisatytYhteydet;
     }
 
-    private static void luoRandomYhteyksia(int montakoyhteytta, Poyta table) {
-        while (table.yhteyksienMaara() < montakoyhteytta) {
-            ArrayList<Sitsaaja> sitsaajat = table.getSitsaajat();
+    private static void luoRandomYhteyksia(int montakoyhteytta, Sitsit sitsit) {
+        while (sitsit.yhteyksienMaara() < montakoyhteytta) {
+            ArrayList<Sitsaaja> sitsaajat = sitsit.getSitsaajat();
 
             Sitsaaja sitsaaja;
             do {
                 sitsaaja = annaRandomSitsaaja(sitsaajat);
-            } while (sitsaaja.palautaYhteyksienMaara() == table.sitsaajienMaara() - 1);
+            } while (sitsaaja.yhteyksienMaara() == sitsit.sitsaajienMaara() - 1);
             
             luoYhteys(sitsaaja, sitsaajat);
         }
@@ -48,7 +48,7 @@ class Yhteydet {
         double korjausVakio = palautaKorjausVakio(lisatytYhteydet, montakoYhteytta, monesko, sitsaajienmaara);
         int lisattavienMaksimiMaara = palautaLisattavienMaksimiMaara(yhteyksiaJaljella, sitsaajiaJaljella, korjausVakio);
 
-        return palautaLuku(lisattavienMaksimiMaara, yhteyksiaJaljella, sitsaajienmaara, montakoYhteytta, monesko, lisatytYhteydet, sitsaajiaJaljella, korjausVakio);
+        return palautaLuku(lisattavienMaksimiMaara, yhteyksiaJaljella, sitsaajienmaara, montakoYhteytta, monesko, lisatytYhteydet);
     }
 
     private static double palautaKorjausVakio(int lisatytYhteydet, int montakoYhteytta, int monesko, int sitsaajienmaara) {
@@ -94,25 +94,15 @@ class Yhteydet {
         }
     }
 
-//    private static void soutShit(int montakoYhteytta, int sitsaajienmaara, int monesko, int lisatytYhteydet, int lisattavienMaksimiMaara, int luku, int yhteyksiaJaljella, int sitsaajiaJaljella, double korjausVakio) {
-//        System.out.print("montako yhteyttä: " + montakoYhteytta + " : sitsaajien määrä: " + sitsaajienmaara);
-//        System.out.print(" : monesko lisäys: " + monesko + " : tähän mennessä lisätyt: " + lisatytYhteydet);
-//        System.out.print(" : lisätään maksimissaan: " + lisattavienMaksimiMaara + " : lisättiin: " + luku);
-//        System.out.print(" : yhteyksiä Jäljellä: " + yhteyksiaJaljella + " : sitsaajia jäljellä: " + sitsaajiaJaljella);
-//        System.out.print(" : korjausvakio: " + korjausVakio);
-//        System.out.println();
-//    }
-
     private static int palautaLisattavienMaksimiMaara(int yhteyksiaJaljella, int sitsaajiaJaljella, double korjausVakio) {
         return (int) (1.0 * (0.5 + yhteyksiaJaljella / sitsaajiaJaljella) * korjausVakio);
     }
 
-    private static int palautaLuku(int lisattavienMaksimiMaara, int yhteyksiaJaljella, int sitsaajienmaara, int montakoYhteytta, int monesko, int lisatytYhteydet, int sitsaajiaJaljella, double korjausVakio) {
+    private static int palautaLuku(int lisattavienMaksimiMaara, int yhteyksiaJaljella, int sitsaajienmaara, int montakoYhteytta, int monesko, int lisatytYhteydet) {
         int luku = Random.luo(lisattavienMaksimiMaara);
         if (luku >= yhteyksiaJaljella || luku >= sitsaajienmaara) {
             return palautaLuotavienYhteyksienMaara(montakoYhteytta, sitsaajienmaara, monesko, lisatytYhteydet);
         }
-//        soutShit(montakoYhteytta, sitsaajienmaara, monesko, lisatytYhteydet, lisattavienMaksimiMaara, luku, yhteyksiaJaljella, sitsaajiaJaljella, korjausVakio);
         return luku;
     }
 }
