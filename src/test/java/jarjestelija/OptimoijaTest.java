@@ -31,6 +31,7 @@ public class OptimoijaTest {
         System.out.println("random alun pisteet: " + pisteet);
         
         RandomGenerator.tulostaSitsaajat(sitsit);
+        RandomGenerator.tulostaYhteydet(sitsit);
         
         this.optimoija.optimoiIstumapaikat(10);
         

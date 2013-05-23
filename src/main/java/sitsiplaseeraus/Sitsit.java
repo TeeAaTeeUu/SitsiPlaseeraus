@@ -1,24 +1,26 @@
 package sitsiplaseeraus;
 
+import Pisteyttaja.PaikanPisteet;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 import sitsiplaseeraus.random.Random;
 
 public class Sitsit {
 
     private int poytienMaara;
-    private final ArrayList<Sitsaaja> sitsaajat;
-    private final HashMap<Sitsaaja, Integer> sitsaajienPoydat;
-    private final HashMap<Sitsaaja, Integer> sitsaajienPaikat;
+    private final ArrayList<Paikka> paikat;
+    private final HashMap<Paikka, Sitsaaja> sitsaajienPaikat;
 
     public Sitsit(int kuinkaMontaPoytaa) {
         this.setPoytienMaara(kuinkaMontaPoytaa);
-        
-        this.sitsaajat = new ArrayList<Sitsaaja>();
-        
-        this.sitsaajienPoydat = new HashMap<Sitsaaja, Integer>();
-        this.sitsaajienPaikat = new HashMap<Sitsaaja, Integer>();
+
+        this.paikat = new ArrayList<Paikka>();
+
+        this.sitsaajienPaikat = new HashMap<Paikka, Sitsaaja>();
+    }
+
+    public ArrayList<Paikka> getPaikat() {
+        return paikat;
     }
 
     private void setPoytienMaara(int kuinkaMontaPoytaa) {
@@ -30,65 +32,61 @@ public class Sitsit {
     }
 
     public int sitsaajienMaara() {
-        return this.sitsaajat.size();
+        return this.paikat.size();
     }
 
-    public void addSitsaaja(String nimi) {
-        addSitsaaja(nimi, Random.luo(this.poytienMaara() - 1));
+    public Paikka addPaikka() {
+        return addPaikka(Random.luo(this.poytienMaara() - 1));
     }
 
-    public void addSitsaaja(String nimi, int mikaPoyta) {
-        Sitsaaja sitsaaja = new Sitsaaja(nimi, mikaPoyta, this.sitsaajienMaaraPoydassa(mikaPoyta));
-        this.sitsaajat.add(sitsaaja);
+    public Paikka addPaikka(int mikaPoyta) {
+        Paikka paikka = new Paikka(mikaPoyta, this.sitsaajienMaaraPoydassa(mikaPoyta));
+
+        this.paikat.add(paikka);
+
+        return paikka;
     }
 
     public boolean deleteSitsaaja(Sitsaaja poistettava) {
-        if (this.sitsaajat.contains(poistettava)) {
-            return this.deleteSitsaajaLoop(poistettava);
-        } else {
-            return false;
-        }
-    }
+        int onnistuiko = 0;
 
-    public boolean deleteSitsaaja(String nimi) {
-        Sitsaaja poistettava = this.getSitsaaja(nimi);
-        if (poistettava == null) {
-            return false;
-        }
-        return this.deleteSitsaajaLoop(poistettava);
-    }
-
-    private boolean deleteSitsaajaLoop(Sitsaaja poistettava) {
-        boolean loytyi = false;
-
-        for (int i = 0; i < this.sitsaajienMaara(); i++) {
-            this.sitsaajat.get(i).deleteYhteys(poistettava);
-
-            if (this.sitsaajat.get(i).equals(poistettava)) {
-                this.sitsaajat.remove(i);
-                loytyi = true;
+        for (int i = 0; i < this.paikat.size(); i++) {
+            if (this.paikat.get(i).getSitsaaja() != null) {
+                if (this.paikat.get(i).getSitsaaja().equals(poistettava)) {
+                    onnistuiko++;
+                    this.paikat.get(i).setSitsaaja(null);
+                } else {
+                    this.paikat.get(i).getSitsaaja().deleteYhteys(poistettava);
+                }
             }
         }
-        return loytyi;
+        if (onnistuiko != 1) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    public Sitsaaja getSitsaaja(int monesko) {
-        return this.sitsaajat.get(monesko);
-    }
-
-    public Sitsaaja getSitsaaja(String nimi) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Paikka getPaikka(int monesko) {
+        return this.paikat.get(monesko);
     }
 
     public ArrayList<Sitsaaja> getSitsaajat() {
-        return this.sitsaajat;
+        ArrayList<Sitsaaja> sitsaajat = new ArrayList<Sitsaaja>();
+
+        for (Paikka paikka : this.paikat) {
+            sitsaajat.add(paikka.getSitsaaja());
+        }
+        return sitsaajat;
     }
 
     public int yhteyksienMaara() {
         int yhteyksienMaara = 0;
-        
-        for (Sitsaaja sitsaaja : sitsaajat) {
-            yhteyksienMaara += sitsaaja.yhteyksienMaara();
+
+        for (Paikka paikka : paikat) {
+            if (paikka.getSitsaaja() != null) {
+                yhteyksienMaara += paikka.getSitsaaja().yhteyksienMaara();
+            }
         }
         return yhteyksienMaara;
     }
@@ -96,26 +94,29 @@ public class Sitsit {
     public int poytienMaara() {
         return this.poytienMaara;
     }
-    
+
     public ArrayList<Sitsaaja> palautaPoydanSitsaajat(int moneskoPoyta) {
-        HashMap<Integer, Sitsaaja> paikat = new HashMap<Integer, Sitsaaja>();
-        ArrayList<Sitsaaja> poydanSitsaajat = new ArrayList<Sitsaaja>();
-        
-        for (Sitsaaja sitsaaja : sitsaajat) {
-            if(sitsaaja.getPoyta() == moneskoPoyta)
-                paikat.put(sitsaaja.getPaikka(), sitsaaja);
+        HashMap<Integer, Sitsaaja> poydanSitsaajat = new HashMap<Integer, Sitsaaja>();
+        ArrayList<Sitsaaja> poydanSitsaajatJarjestyksessa = new ArrayList<Sitsaaja>();
+
+        for (Paikka paikka : this.paikat) {
+            if (paikka.getPoyta() == moneskoPoyta) {
+                if (paikka.getSitsaaja() != null) {
+                    poydanSitsaajat.put(paikka.getPaikka(), paikka.getSitsaaja());
+                }
+            }
         }
-        for (int i = 0; i < paikat.size(); i++) {
-            poydanSitsaajat.add(paikat.get(i));
+        for (int i = 0; i < poydanSitsaajat.size(); i++) {
+            poydanSitsaajatJarjestyksessa.add(poydanSitsaajat.get(i));
         }
-        
-        return poydanSitsaajat;
+
+        return poydanSitsaajatJarjestyksessa;
     }
 
-    private int sitsaajienMaaraPoydassa(int mikaPoyta) {
+    protected int sitsaajienMaaraPoydassa(int mikaPoyta) {
         int maara = 0;
 
-        for (Sitsaaja sitsaaja : sitsaajat) {
+        for (Paikka sitsaaja : paikat) {
             if (sitsaaja.getPoyta() == mikaPoyta) {
                 maara++;
             }
@@ -125,28 +126,48 @@ public class Sitsit {
 
     public HashMap<Sitsaaja, HashMap> palautaYhteydet() {
         HashMap<Sitsaaja, HashMap> kaikkiYhteydet = new HashMap<Sitsaaja, HashMap>();
-        
-        for (Sitsaaja sitsaaja : sitsaajat) {
-            kaikkiYhteydet.put(sitsaaja, sitsaaja.palautaYhteydet());
+
+        for (Paikka paikka : paikat) {
+            kaikkiYhteydet.put(paikka.getSitsaaja(), paikka.getSitsaaja().palautaYhteydet());
         }
         return kaikkiYhteydet;
     }
 
-    public HashMap<Sitsaaja, Integer> palautaPoydat() {
-        this.sitsaajienPoydat.clear();
-        
-        for (Sitsaaja sitsaaja : sitsaajat) {
-            this.sitsaajienPoydat.put(sitsaaja, sitsaaja.getPoyta());
-        }
-        return this.sitsaajienPoydat;
-    }
-
-    public HashMap<Sitsaaja, Integer> palautaPaikat() {
+    public HashMap<Paikka, Sitsaaja> palautaPaikat() {
         this.sitsaajienPaikat.clear();
-        
-        for (Sitsaaja sitsaaja : sitsaajat) {
-            this.sitsaajienPaikat.put(sitsaaja, sitsaaja.getPaikka());
+
+        for (Paikka paikka : paikat) {
+            this.sitsaajienPaikat.put(paikka, paikka.getSitsaaja());
         }
         return this.sitsaajienPaikat;
+    }
+
+    public void lisaaPaikoilleTiedotAvecinJaPuolisonPaikoista() {
+        for (Paikka paikka : paikat) {
+            for (Paikka kohdePaikka : paikat) {
+                if (paikka.getPoyta() == kohdePaikka.getPoyta()) {
+                    if (paikka.getPaikka() % 2 == 0) {
+                        if (paikka.getPaikka() - kohdePaikka.getPaikka() == -2) {
+                            paikka.setNaisenAvecinPaikka(kohdePaikka);
+                        } else if (paikka.getPaikka() - kohdePaikka.getPaikka() == 2) {
+                            paikka.setMiehenAvecinPaikka(kohdePaikka);
+                        }
+                    } else {
+                        if (paikka.getPaikka() - kohdePaikka.getPaikka() == 2) {
+                            paikka.setNaisenAvecinPaikka(kohdePaikka);
+                        } else if (paikka.getPaikka() - kohdePaikka.getPaikka() == -2) {
+                            paikka.setMiehenAvecinPaikka(kohdePaikka);
+                        }
+                    }
+                    if (Math.abs(paikka.getPaikka() - kohdePaikka.getPaikka()) == 1) {
+                        if (PaikanPisteet.paikkaOnVasemmalla(paikka.getPaikka()) == true && (paikka.getPaikka() - kohdePaikka.getPaikka()) == -1) {
+                            paikka.setPuolisonPaikka(kohdePaikka);
+                        } else if (PaikanPisteet.paikkaOnVasemmalla(paikka.getPaikka()) == false && (paikka.getPaikka() - kohdePaikka.getPaikka()) == 1) {
+                            paikka.setPuolisonPaikka(kohdePaikka);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

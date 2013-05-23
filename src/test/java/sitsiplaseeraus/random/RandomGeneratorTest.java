@@ -8,7 +8,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import sitsiplaseeraus.Sitsaaja;
+import sitsiplaseeraus.PaikkaTest;
 import sitsiplaseeraus.Sitsit;
 
 public class RandomGeneratorTest {
@@ -44,7 +44,7 @@ public class RandomGeneratorTest {
     public void randomDatanLisaysTuottaaJotain() {
         this.random.taytaRandomDatalla(16, 40, this.Sitsit);
 
-        assertTrue(Sitsit.getSitsaaja(7).getNimi().length() >= 3);
+        assertTrue(Sitsit.getPaikka(7).getSitsaaja().getNimi().length() >= 3);
     }
 
     @Test

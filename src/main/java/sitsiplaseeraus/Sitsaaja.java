@@ -6,54 +6,95 @@ import java.util.Map;
 public class Sitsaaja {
 
     private String nimi;
+    private int mies;
     private HashMap<Sitsaaja, Integer> yhteydet;
-    private int paikka;
-    private int poyta;
-    private boolean mies;
+    private Sitsaaja avec;
+    private boolean avecIsSet;
+    private boolean puolisoIsSet;
+    private Sitsaaja puoliso;
+    private Paikka paikka;
 
-    public Sitsaaja(String nimi, int poyta, int paikka) {
-        this.setNimi(nimi);
-        this.setPoyta(poyta);
-        this.setPaikka(paikka);
-        
+    public Sitsaaja(String nimi) {
+        this.nimi = nimi;
+
         this.yhteydet = new HashMap<Sitsaaja, Integer>();
-    }
-    
-    public int getPaikka() {
-        return paikka;
+
+        this.avecIsSet = false;
+        this.puolisoIsSet = false;
+        this.mies = -1;
     }
 
-    public void setPaikka(int paikka) {
-        this.paikka = paikka;
-    }
-
-    public int getPoyta() {
-        return poyta;
-    }
-
-    public void setPoyta(int poyta) {
-        this.poyta = poyta;
-    }
-
-    public String getNimi() {
-        return nimi;
+    public Sitsaaja(String nimi, boolean mies) {
+        this(nimi);
+        this.setMies(mies);
     }
 
     public void setNimi(String nimi) {
         this.nimi = nimi;
     }
 
+    public String getNimi() {
+        return nimi;
+    }
+
     public boolean isMies() {
-        return mies;
+        if (this.mies == 1) {
+            return true;
+        } else if (this.mies == 0) {
+            return false;
+        } else {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates. 
+        }
     }
 
     public void setMies(boolean mies) {
-        this.mies = mies;
+        if (mies == true) {
+            this.mies = 1;
+        } else {
+            this.mies = 0;
+        }
     }
-    
-    public void vaihdaPaikka(int poyta, int paikka) {
-        this.setPoyta(poyta);
-        this.setPaikka(paikka);
+
+    public void setAvec(Sitsaaja avec) {
+        this.avec = avec;
+        this.setAvecIsSet();
+    }
+
+    public Sitsaaja getAvec() {
+        return avec;
+    }
+
+    public Sitsaaja getPuoliso() {
+        return puoliso;
+    }
+
+    public void setPuoliso(Sitsaaja puoliso) {
+        this.puoliso = puoliso;
+        this.setPuolisoIsSet();
+    }
+
+    public Paikka getPaikka() {
+        return paikka;
+    }
+
+    public void setPaikka(Paikka paikka) {
+        this.paikka = paikka;
+    }
+
+    public boolean avecIsSet() {
+        return avecIsSet;
+    }
+
+    private void setAvecIsSet() {
+        this.avecIsSet = true;
+    }
+
+    public boolean puolisoIsSet() {
+        return puolisoIsSet;
+    }
+
+    private void setPuolisoIsSet() {
+        this.puolisoIsSet = true;
     }
 
     public boolean setYhteys(Sitsaaja sitsaaja, int arvo) {
@@ -76,7 +117,7 @@ public class Sitsaaja {
     public HashMap<Sitsaaja, Integer> palautaYhteydet() {
         return this.yhteydet;
     }
-    
+
     public int yhteyksienMaara() {
         int yhteyksienMaara = 0;
         for (Map.Entry yhteys : this.yhteydet.entrySet()) {
@@ -84,17 +125,4 @@ public class Sitsaaja {
         }
         return yhteyksienMaara;
     }
-
-//    public Sitsaaja palautaTarkeinKanssaSitsaaja() {
-//        Sitsaaja tarkein = this;
-//        int tarkeimmallaPisteita = -5;
-//        
-//        for (Map.Entry<Sitsaaja, Integer> yhteys : this.palautaYhteydet().entrySet()) {
-//            if(yhteys.getValue() > tarkeimmallaPisteita) {
-//                tarkein = yhteys.getKey();
-//                tarkeimmallaPisteita = yhteys.getValue();
-//            }
-//        }
-//        return tarkein;
-//    }
 }

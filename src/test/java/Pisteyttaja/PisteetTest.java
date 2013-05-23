@@ -4,14 +4,14 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import sitsiplaseeraus.Sitsit;
-import sitsiplaseeraus.Sitsaaja;
+import sitsiplaseeraus.PaikkaTest;
 import sitsiplaseeraus.random.RandomGenerator;
 
 public class PisteetTest {
 
     private RandomGenerator random;
     private Sitsit sitsit;
-    private Sitsaaja sitsaaja;
+    private PaikkaTest sitsaaja;
     private Pisteet pisteet;
 
     public PisteetTest() {

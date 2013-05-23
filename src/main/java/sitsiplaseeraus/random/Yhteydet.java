@@ -1,6 +1,7 @@
 package sitsiplaseeraus.random;
 
 import java.util.ArrayList;
+import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 
@@ -63,7 +64,7 @@ class Yhteydet {
         }
     }
 
-    private static Sitsaaja annaToinenRandomSitsaaja(Sitsaaja eriSitsaaja, ArrayList<Sitsaaja> sitsaajat) {
+    protected static Sitsaaja annaToinenRandomSitsaaja(Sitsaaja eriSitsaaja, ArrayList<Sitsaaja> sitsaajat) {
         Sitsaaja sitsaaja = annaRandomSitsaaja(sitsaajat);
         if (sitsaaja.getNimi().equals(eriSitsaaja.getNimi())) {
             return annaToinenRandomSitsaaja(eriSitsaaja, sitsaajat);
@@ -72,7 +73,7 @@ class Yhteydet {
         }
     }
 
-    private static Sitsaaja annaRandomSitsaaja(ArrayList<Sitsaaja> sitsaajat) {
+    protected static Sitsaaja annaRandomSitsaaja(ArrayList<Sitsaaja> sitsaajat) {
         int moneskoSitsaaja = Random.luo(sitsaajat.size() - 1);
         return sitsaajat.get(moneskoSitsaaja);
     }

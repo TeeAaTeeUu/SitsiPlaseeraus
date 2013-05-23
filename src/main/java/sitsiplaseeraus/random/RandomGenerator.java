@@ -1,5 +1,6 @@
 package sitsiplaseeraus.random;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import sitsiplaseeraus.Sitsaaja;
@@ -16,6 +17,16 @@ public class RandomGenerator {
         int moneskoyhteydellinen = 0;
         for (Map.Entry sitsaajanYhteydet : kaikkiYhteydet.entrySet()) {
             Sitsaaja sitsaaja = (Sitsaaja) sitsaajanYhteydet.getKey();
+
+            if (sitsaaja.avecIsSet()) {
+                System.out.println(sitsaaja.getNimi() + " haluaa olla sitsaajan " + sitsaaja.getAvec().getNimi() + " avec");
+                System.out.println(sitsaaja.getAvec().getNimi() + " haluaa olla sitsaajan " + sitsaaja.getAvec().getAvec().getNimi() + " avec");
+            }
+            if (sitsaaja.puolisoIsSet()) {
+                System.out.println(sitsaaja.getNimi() + " haluaa olla sitsaajan " + sitsaaja.getPuoliso().getNimi() + " puoliso");
+                System.out.println(sitsaaja.getPuoliso().getNimi() + " haluaa olla sitsaajan " + sitsaaja.getPuoliso().getPuoliso().getNimi() + " puoliso");
+            }
+
             HashMap<Sitsaaja, HashMap> yhteydet = (HashMap<Sitsaaja, HashMap>) sitsaajanYhteydet.getValue();
             moneskoSitsaaja++;
             boolean eka = true;
@@ -81,6 +92,9 @@ public class RandomGenerator {
 
     public void taytaRandomDatalla(int montakoSitsaajaa, int montakoYhteytta, Sitsit sitsit) {
         this.lisaaNimia(montakoSitsaajaa, sitsit);
+
+        lisaaPuolisojaJaAveceja(montakoSitsaajaa / 5 / 2, sitsit);
+
         while (sitsit.yhteyksienMaara() < montakoYhteytta) {
             Yhteydet.lisaaYhteyksia(montakoYhteytta, sitsit);
         }
@@ -88,7 +102,64 @@ public class RandomGenerator {
 
     protected void lisaaNimia(int montakoSitsaajaa, Sitsit sitsit) {
         for (int i = 0; i < montakoSitsaajaa; i++) {
-            sitsit.addSitsaaja(randomNimi());
+            int kumpi = Random.luo(1);
+
+            Sitsaaja sitsaaja;
+            if (kumpi == 1) {
+                sitsaaja = new Sitsaaja(this.palautaNimi(true), false);
+            } else {
+                sitsaaja = new Sitsaaja(this.palautaNimi(false), true);
+            }
+            sitsit.addPaikka().setSitsaaja(sitsaaja);
         }
+    }
+
+    private static void lisaaPuolisojaJaAveceja(int kuinkaPaljonLuodaan, Sitsit sitsit) {
+        ArrayList<Sitsaaja> sitsaajat = sitsit.getSitsaajat();
+
+        int puolisoja = kuinkaPaljonLuodaan / 3;
+
+        lisaaPuolisoja(puolisoja, sitsaajat);
+        lisaaAveceja(kuinkaPaljonLuodaan - puolisoja, sitsaajat);
+    }
+
+    private static void lisaaPuolisoja(int puolisoja, ArrayList<Sitsaaja> sitsaajat) {
+        int i = 0;
+        do {
+            Sitsaaja sitsaaja = Yhteydet.annaRandomSitsaaja(sitsaajat);
+            do {
+                sitsaaja = Yhteydet.annaRandomSitsaaja(sitsaajat);
+            } while (sitsaaja.puolisoIsSet() == true || sitsaaja.avecIsSet() == true);
+
+            Sitsaaja kohdeSitsaaja = Yhteydet.annaToinenRandomSitsaaja(sitsaaja, sitsaajat);
+            do {
+                kohdeSitsaaja = Yhteydet.annaToinenRandomSitsaaja(sitsaaja, sitsaajat);
+            } while (kohdeSitsaaja.puolisoIsSet() == true || kohdeSitsaaja.avecIsSet() == true);
+
+            sitsaaja.setPuoliso(kohdeSitsaaja);
+            kohdeSitsaaja.setPuoliso(sitsaaja);
+
+            i++;
+        } while (i < puolisoja);
+    }
+
+    private static void lisaaAveceja(int aveceja, ArrayList<Sitsaaja> sitsaajat) {
+        int i = 0;
+        do {
+            Sitsaaja sitsaaja = Yhteydet.annaRandomSitsaaja(sitsaajat);;
+            do {
+                sitsaaja = Yhteydet.annaRandomSitsaaja(sitsaajat);
+            } while (sitsaaja.puolisoIsSet() == true || sitsaaja.avecIsSet() == true);
+
+            Sitsaaja kohdeSitsaaja = Yhteydet.annaRandomSitsaaja(sitsaajat);
+            do {
+                kohdeSitsaaja = Yhteydet.annaRandomSitsaaja(sitsaajat);
+            } while (kohdeSitsaaja.puolisoIsSet() == true || kohdeSitsaaja.avecIsSet() == true);
+
+            sitsaaja.setAvec(kohdeSitsaaja);
+            kohdeSitsaaja.setAvec(sitsaaja);
+            
+            i++;
+        } while (i < aveceja);
     }
 }

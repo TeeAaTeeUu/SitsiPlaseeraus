@@ -2,6 +2,7 @@ package jarjestelija;
 
 import Pisteyttaja.Pisteet;
 import java.util.HashMap;
+import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.random.Random;
@@ -14,20 +15,20 @@ public class Optimoija {
     private Pisteet pisteet;
     private long aika;
     private double VanhassaPisteita;
-    private HashMap<Sitsaaja, Integer> vanhatPaikat;
-    private HashMap<Sitsaaja, Integer> vanhatPoydat;
+    private HashMap<Paikka, Sitsaaja> vanhatPaikat;
     private final int sitsaajienMaara;
     private boolean muutosOnTapahtunut;
 
     public Optimoija(Sitsit sitsit) {
         this.sitsit = sitsit;
+        this.sitsit.lisaaPaikoilleTiedotAvecinJaPuolisonPaikoista();
 
         this.jarjestelija = new Jarjestaja(this.sitsit);
 
         this.pisteet = new Pisteet(this.sitsit);
-        this.vanhatPoydat = new HashMap<Sitsaaja, Integer>();
 
         this.sitsaajienMaara = this.sitsit.sitsaajienMaara();
+        
     }
 
     public void optimoiIstumapaikat(int sekunttia) {
@@ -46,7 +47,9 @@ public class Optimoija {
     }
 
     private void kokeileVaihtoa() {
-        this.alustaVaihtoaVarten();
+        if (this.muutosOnTapahtunut = true) {
+            this.alustaVaihtoaVarten();
+        }
 
         int kuinkaMontaVaihtoa = Random.luo(this.sitsaajienMaara, 1);
         for (int i = 0; i <= kuinkaMontaVaihtoa; i++) {
@@ -64,28 +67,27 @@ public class Optimoija {
     }
 
     private void alustaVaihtoaVarten() {
-        if (this.muutosOnTapahtunut = true) {
-            this.VanhassaPisteita = this.pisteet.palautaPisteet();
-            this.vanhatPaikat = this.sitsit.palautaPaikat();
-            this.vanhatPoydat = this.sitsit.palautaPoydat();
-        }
+        this.VanhassaPisteita = this.pisteet.palautaPisteet();
+        this.vanhatPaikat = this.sitsit.palautaPaikat();
     }
 
     private void tulostaOnnistumisviestiTaiPalautaVanha() {
-        if (this.pisteet.palautaPisteet() < this.VanhassaPisteita) {
+        Double pisteita = this.pisteet.palautaPisteet();
+        if (pisteita < this.VanhassaPisteita) {
             this.palautaVanhat();
-            
+
             this.muutosOnTapahtunut = false;
         } else {
             this.muutosOnTapahtunut = true;
-            System.out.print(System.currentTimeMillis() + "\t" + this.pisteet.palautaPisteet() + "\t");
-            System.out.println((int) (System.currentTimeMillis() - this.aika) / 1000 + " sekunttia kulunut");
+            System.out.print(System.currentTimeMillis() + "\t" + pisteita + "\t");
+            System.out.print((int) (System.currentTimeMillis() - this.aika) / 1000 + " sekunttia kulunut ");
+            System.out.println(this.pisteet.getAvecienMaara() + " avecia parina ja " + this.pisteet.getPuolisojenMaara() + " puolisoa parina");
         }
     }
 
     private void palautaVanhat() {
-        for (Sitsaaja sitsaaja : this.sitsit.getSitsaajat()) {
-            sitsaaja.vaihdaPaikka(this.vanhatPoydat.get(sitsaaja), this.vanhatPaikat.get(sitsaaja));
+        for (Paikka paikka : this.sitsit.getPaikat()) {
+            paikka.setSitsaaja(this.vanhatPaikat.get(paikka));
         }
     }
 }
