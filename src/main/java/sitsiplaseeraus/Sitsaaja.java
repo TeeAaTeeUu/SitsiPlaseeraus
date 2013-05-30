@@ -1,7 +1,8 @@
 package sitsiplaseeraus;
 
-import java.util.HashMap;
+import omatTietorakenteet.HashMap;
 import java.util.Map;
+import omatTietorakenteet.Vektori;
 
 public class Sitsaaja {
 
@@ -120,7 +121,7 @@ public class Sitsaaja {
 
     public int yhteyksienMaara() {
         int yhteyksienMaara = 0;
-        for (Map.Entry yhteys : this.yhteydet.entrySet()) {
+        for (Vektori<Sitsaaja, Integer> yhteys : this.yhteydet) {
             yhteyksienMaara++;
         }
         return yhteyksienMaara;

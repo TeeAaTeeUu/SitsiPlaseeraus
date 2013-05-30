@@ -1,7 +1,8 @@
 package Pisteyttaja;
 
-import java.util.HashMap;
+import omatTietorakenteet.HashMap;
 import java.util.Map;
+import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsaaja;
 
@@ -17,24 +18,31 @@ public class PaikanPisteet {
     private final Laskin laskin;
     private boolean avec;
     private boolean puoliso;
+    private double pariPisteet;
+    private double sukupuoliPisteet;
+    private double yhteysPisteet;
 
-    protected PaikanPisteet(Paikka paikka) {
+    protected PaikanPisteet(Paikka paikka, Laskin laskin) {
         this.paikka = paikka;
         this.onYhteyksia = false;
-        this.laskin = new Laskin();
+        this.laskin = laskin;
     }
 
     protected double palautaPisteet() {
         this.yhteydet = this.paikka.getSitsaaja().palautaYhteydet();
 
-        double pisteet = 0.0;
         this.avec = false;
         this.puoliso = false;
+        
+        pariPisteet = 0.0;
+        sukupuoliPisteet = 0.0;
+        yhteysPisteet = 0.0;
 
-        pisteet += this.tarkistaAvecJaPuoliso();
-        pisteet += this.tarkistaYmparillaOlevienSukupuolet();
+        pariPisteet += this.tarkistaAvecJaPuoliso();
+        sukupuoliPisteet += this.tarkistaYmparillaOlevienSukupuolet();
+        
 
-        for (Map.Entry yhteys : yhteydet.entrySet()) {
+        for (Vektori<Sitsaaja, Integer> yhteys : yhteydet) {
             this.onYhteyksia = true;
 
             this.kohdeSitsaaja = (Sitsaaja) yhteys.getKey();
@@ -45,10 +53,23 @@ public class PaikanPisteet {
 
                 this.kohteidenErotus = this.paikka.getPaikka() - this.kohdePaikka.getPaikka();
 
-                pisteet += this.palautaPisteet(arvo, kohteidenErotus, this.paikka.getPaikka());
+                yhteysPisteet += this.palautaPisteet(arvo, kohteidenErotus, this.paikka.getPaikka());
             }
         }
-        return pisteet;
+        
+        return pariPisteet + sukupuoliPisteet + yhteysPisteet;
+    }
+
+    public double getPariPisteet() {
+        return pariPisteet;
+    }
+
+    public double getSukupuoliPisteet() {
+        return sukupuoliPisteet;
+    }
+
+    public double getYhteysPisteet() {
+        return yhteysPisteet;
     }
 
     protected boolean onkoYhteyksia() {
@@ -97,46 +118,77 @@ public class PaikanPisteet {
     }
 
     private double tarkistaAvecJaPuoliso() {
-        double pisteet = this.tarkistaAvec();
+        double pisteet = this.tarkistaAvec(this.paikka);
         if (pisteet == 0.0) {
-            return this.tarkistaPuoliso();
+            pisteet = this.tarkistaPuoliso(this.paikka);
+            if (pisteet > 0.0) {
+                setPuoliso();
+            }
+            return pisteet;
+        } else {
+            if (pisteet > 0.0) {
+                setAvec();
+            }
+            return pisteet;
+        }
+    }
+
+    public static double tarkistaAvecJaPuoliso(Paikka paikka) {
+        double pisteet = tarkistaAvec(paikka);
+        if (pisteet == 0.0) {
+            pisteet = tarkistaPuoliso(paikka);
+            return pisteet;
         } else {
             return pisteet;
         }
     }
 
-    private double tarkistaAvec() {
-        if (this.paikka.getSitsaaja().avecIsSet() == false) {
-            return 0.0;
-        } else {
-            int mikaPari = onkoMillainenPari(this.paikka.getSitsaaja());
-            if (mikaPari == 1 || mikaPari == 0) {
-                if (this.paikka.getMiehenAvecinPaikka() != null) {
-                    if (this.paikka.getSitsaaja().getAvec().equals(this.paikka.getMiehenAvecinPaikka().getSitsaaja())) {
-                        setAvec();
-                        return 1000.0;
+    private static double tarkistaAvec(Paikka paikka) {
+        if (paikka != null) {
+            if (paikka.getSitsaaja().avecIsSet() == false) {
+                return 0.0;
+            } else {
+                int mikaPari = onkoMillainenPari(paikka.getSitsaaja());
+                if (mikaPari == 1) {
+                    if (paikka.getMiehenAvecinPaikka() != null) {
+                        if (paikka.getSitsaaja().getAvec().equals(paikka.getMiehenAvecinPaikka().getSitsaaja())) {
+
+                            return 10000.1;
+                        }
                     }
-                }
-            } else if (mikaPari == -1 || mikaPari == 0) {
-                if (this.paikka.getNaisenAvecinPaikka() != null) {
-                    if (this.paikka.getSitsaaja().getAvec().equals(this.paikka.getNaisenAvecinPaikka().getSitsaaja())) {
-                        setAvec();
-                        return 1000.0;
+                } else if (mikaPari == -1) {
+                    if (paikka.getNaisenAvecinPaikka() != null) {
+                        if (paikka.getSitsaaja().getAvec().equals(paikka.getNaisenAvecinPaikka().getSitsaaja())) {
+                            return 10000.2;
+                        }
+                    }
+                } else if (mikaPari == 0) {
+                    if (paikka.getNaisenAvecinPaikka() != null) {
+                        if (paikka.getSitsaaja().getAvec().equals(paikka.getNaisenAvecinPaikka().getSitsaaja())) {
+                            return 10000.2;
+                        }
+                    }
+                    if (paikka.getMiehenAvecinPaikka() != null) {
+                        if (paikka.getSitsaaja().getAvec().equals(paikka.getMiehenAvecinPaikka().getSitsaaja())) {
+                            return 10000.1;
+                        }
                     }
                 }
             }
-            return 0.0;
         }
+        return 0.0;
     }
 
-    private double tarkistaPuoliso() {
-        if (this.paikka.getSitsaaja().puolisoIsSet() == false) {
-            return 0.0;
-        } else {
-            if (this.paikka.getPuolisonPaikka() != null) {
-                if (this.paikka.getSitsaaja().getPuoliso().equals(this.paikka.getPuolisonPaikka().getSitsaaja())) {
-                    setPuoliso();
-                    return 1000.0;
+    private static double tarkistaPuoliso(Paikka paikka) {
+        if (paikka != null) {
+            if (paikka.getSitsaaja().puolisoIsSet() == false) {
+                return 0.0;
+            } else {
+                if (paikka.getPuolisonPaikka() != null) {
+                    if (paikka.getSitsaaja().getPuoliso().equals(paikka.getPuolisonPaikka().getSitsaaja())) {
+
+                        return 10000.0;
+                    }
                 }
             }
         }
@@ -173,38 +225,42 @@ public class PaikanPisteet {
     }
 
     private double tarkistaYmparillaOlevienSukupuolet() {
-        int pointsit = 0;
-        int tarkeys = 25;
+        int miestenMaara = 0;
+        int tarkeys = 500;
+        int sukupuolettomat = 0;
 
         try {
             if (paikka.getMiehenAvecinPaikka() != null) {
                 if (paikka.getMiehenAvecinPaikka().getSitsaaja().isMies()) {
-                    pointsit++;
+                    miestenMaara++;
                 }
             }
         } catch (UnsupportedOperationException e) {
+            sukupuolettomat++;
         }
         try {
             if (paikka.getNaisenAvecinPaikka() != null) {
                 if (paikka.getNaisenAvecinPaikka().getSitsaaja().isMies()) {
-                    pointsit++;
+                    miestenMaara++;
                 }
             }
         } catch (UnsupportedOperationException e) {
+            sukupuolettomat++;
         }
         try {
             if (paikka.getPuolisonPaikka() != null) {
                 if (paikka.getPuolisonPaikka().getSitsaaja().isMies()) {
-                    pointsit++;
+                    miestenMaara++;
                 }
             }
         } catch (UnsupportedOperationException e) {
+            sukupuolettomat++;
         }
         try {
             if (paikka.getSitsaaja().isMies()) {
-                return (3 - pointsit) * tarkeys;
+                return (3 - miestenMaara - sukupuolettomat) * tarkeys;
             } else {
-                return pointsit * tarkeys;
+                return miestenMaara * tarkeys;
             }
         } catch (UnsupportedOperationException e) {
         }

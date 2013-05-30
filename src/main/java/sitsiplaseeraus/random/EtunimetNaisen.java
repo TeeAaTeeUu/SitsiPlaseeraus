@@ -1,6 +1,6 @@
 package sitsiplaseeraus.random;
 
-import java.util.ArrayList;
+import omatTietorakenteet.ArrayList;
 
 public class EtunimetNaisen {
 

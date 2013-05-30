@@ -41,12 +41,15 @@ public class PaikkaTest {
 
         sitsit.lisaaPaikoilleTiedotAvecinJaPuolisonPaikoista();
 
+        assertEquals(-2, sitsit.getPaikka(3).getPaikka() - sitsit.getPaikka(3).getMiehenAvecinPaikka().getPaikka());
         assertEquals(sitsit.getPaikka(3), sitsit.getPaikka(3).getMiehenAvecinPaikka().getNaisenAvecinPaikka());
         assertEquals(false, sitsit.getPaikka(3).getMiehenAvecinPaikka().equals(sitsit.getPaikka(3)));
 
+        assertEquals(2, sitsit.getPaikka(3).getPaikka() - sitsit.getPaikka(3).getNaisenAvecinPaikka().getPaikka());
         assertEquals(sitsit.getPaikka(3), sitsit.getPaikka(3).getNaisenAvecinPaikka().getMiehenAvecinPaikka());
         assertEquals(false, sitsit.getPaikka(3).getNaisenAvecinPaikka().equals(sitsit.getPaikka(3)));
 
+        assertEquals(1, Math.abs(sitsit.getPaikka(3).getPuolisonPaikka().getPaikka() - sitsit.getPaikka(3).getPaikka()));
         assertEquals(sitsit.getPaikka(3), sitsit.getPaikka(3).getPuolisonPaikka().getPuolisonPaikka());
         assertEquals(false, sitsit.getPaikka(3).getPuolisonPaikka().equals(sitsit.getPaikka(3)));
 

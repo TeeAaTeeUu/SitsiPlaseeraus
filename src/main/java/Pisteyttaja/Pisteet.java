@@ -1,6 +1,6 @@
 package Pisteyttaja;
 
-import java.util.ArrayList;
+import omatTietorakenteet.ArrayList;
 import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsit;
 
@@ -13,10 +13,15 @@ public class Pisteet {
     private ArrayList<Paikka> paikkaLista;
     private int avec;
     private int puoliso;
+    private Laskin laskin;
+    private double pariPisteet;
+    private double sukupuoliPisteet;
+    private double yhteysPisteet;
 
     public Pisteet(Sitsit sitsit) {
         this.sitsit = sitsit;
         this.paikat = new ArrayList<PaikanPisteet>();
+        this.laskin = new Laskin();
 
         this.alustaPaikat();
 
@@ -27,6 +32,10 @@ public class Pisteet {
         this.pisteet = 0.0;
         this.avec = 0;
         this.puoliso = 0;
+
+        pariPisteet = 0.0;
+        sukupuoliPisteet = 0.0;
+        yhteysPisteet = 0.0;
 
         this.alustaSitsaajat();
 
@@ -39,8 +48,24 @@ public class Pisteet {
                 this.puoliso++;
             }
             this.onYhteyksia = true;
+
+            pariPisteet += sitsaajanPisteet.getPariPisteet();
+            sukupuoliPisteet += sitsaajanPisteet.getSukupuoliPisteet();
+            yhteysPisteet += sitsaajanPisteet.getYhteysPisteet();
         }
         return pisteet;
+    }
+
+    public double getPariPisteet() {
+        return pariPisteet;
+    }
+
+    public double getSukupuoliPisteet() {
+        return sukupuoliPisteet;
+    }
+
+    public double getYhteysPisteet() {
+        return yhteysPisteet;
     }
 
     protected boolean onkoYhteyksia() {
@@ -51,16 +76,16 @@ public class Pisteet {
         this.paikkaLista = this.sitsit.getPaikat();
 
         for (Paikka paikka : this.paikkaLista) {
-            PaikanPisteet paikanPisteet = new PaikanPisteet(paikka);
+            PaikanPisteet paikanPisteet = new PaikanPisteet(paikka, this.laskin);
             this.paikat.add(paikanPisteet);
         }
     }
 
-    private void alustaSitsaajat() {
+    public void alustaSitsaajat() {
         for (Paikka paikka : this.paikkaLista) {
             paikka.getSitsaaja().setPaikka(paikka);
         }
-        
+
     }
 
     public int getAvecienMaara() {

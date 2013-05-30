@@ -1,8 +1,8 @@
 package sitsiplaseeraus;
 
 import Pisteyttaja.PaikanPisteet;
-import java.util.ArrayList;
-import java.util.HashMap;
+import omatTietorakenteet.ArrayList;
+import omatTietorakenteet.HashMap;
 import sitsiplaseeraus.random.Random;
 
 public class Sitsit {
@@ -111,6 +111,19 @@ public class Sitsit {
         }
 
         return poydanSitsaajatJarjestyksessa;
+    }
+    
+    public HashMap<Integer, Paikka> palautaPoydanPaikat(int moneskoPoyta) {
+        HashMap<Integer, Paikka> poydanPaikat = new HashMap<Integer, Paikka>();
+
+        for (Paikka paikka : this.paikat) {
+            if (paikka.getPoyta() == moneskoPoyta) {
+                if (paikka.getSitsaaja() != null) {
+                    poydanPaikat.put(paikka.getPaikka(), paikka);
+                }
+            }
+        }
+        return poydanPaikat;
     }
 
     protected int sitsaajienMaaraPoydassa(int mikaPoyta) {

@@ -1,8 +1,8 @@
 package sitsiplaseeraus.random;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import omatTietorakenteet.ArrayList;
+import omatTietorakenteet.HashMap;
+import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 
@@ -15,22 +15,20 @@ public class RandomGenerator {
         int moneskoYhteys = 0;
         int moneskoSitsaaja = 0;
         int moneskoyhteydellinen = 0;
-        for (Map.Entry sitsaajanYhteydet : kaikkiYhteydet.entrySet()) {
+        for (Vektori<Sitsaaja, HashMap> sitsaajanYhteydet : kaikkiYhteydet) {
             Sitsaaja sitsaaja = (Sitsaaja) sitsaajanYhteydet.getKey();
 
             if (sitsaaja.avecIsSet()) {
                 System.out.println(sitsaaja.getNimi() + " haluaa olla sitsaajan " + sitsaaja.getAvec().getNimi() + " avec");
-                System.out.println(sitsaaja.getAvec().getNimi() + " haluaa olla sitsaajan " + sitsaaja.getAvec().getAvec().getNimi() + " avec");
             }
             if (sitsaaja.puolisoIsSet()) {
                 System.out.println(sitsaaja.getNimi() + " haluaa olla sitsaajan " + sitsaaja.getPuoliso().getNimi() + " puoliso");
-                System.out.println(sitsaaja.getPuoliso().getNimi() + " haluaa olla sitsaajan " + sitsaaja.getPuoliso().getPuoliso().getNimi() + " puoliso");
             }
 
-            HashMap<Sitsaaja, HashMap> yhteydet = (HashMap<Sitsaaja, HashMap>) sitsaajanYhteydet.getValue();
+            HashMap<Sitsaaja, Integer> yhteydet = (HashMap<Sitsaaja, Integer>) sitsaajanYhteydet.getValue();
             moneskoSitsaaja++;
             boolean eka = true;
-            for (Map.Entry yhteys : yhteydet.entrySet()) {
+            for (Vektori<Sitsaaja, Integer> yhteys : yhteydet) {
                 Sitsaaja kohdeSitsaaja = (Sitsaaja) yhteys.getKey();
                 int arvo = (Integer) yhteys.getValue();
                 System.out.println(sitsaaja.getNimi() + " pit\u00e4\u00e4 sitsaajasta " + kohdeSitsaaja.getNimi() + " arvolla " + arvo);

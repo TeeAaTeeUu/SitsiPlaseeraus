@@ -1,7 +1,6 @@
 package sitsiplaseeraus.random;
 
-import java.util.ArrayList;
-import sitsiplaseeraus.Paikka;
+import omatTietorakenteet.ArrayList;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 

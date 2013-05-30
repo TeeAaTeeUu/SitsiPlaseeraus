@@ -1,8 +1,8 @@
 package Pisteyttaja;
 
-import java.util.HashMap;
+import omatTietorakenteet.HashMap;
 
-class Laskin {
+public class Laskin {
 
     private final HashMap<Double, Double> varasto;
 

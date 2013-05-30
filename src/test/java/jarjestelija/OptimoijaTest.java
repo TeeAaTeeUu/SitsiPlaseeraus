@@ -33,7 +33,7 @@ public class OptimoijaTest {
         RandomGenerator.tulostaSitsaajat(sitsit);
         RandomGenerator.tulostaYhteydet(sitsit);
         
-        this.optimoija.optimoiIstumapaikat(10);
+        this.optimoija.optimoiIstumapaikat(2);
         
         assertTrue(this.optimoija.getPisteet().palautaPisteet() > pisteet);
         

@@ -15,12 +15,14 @@ public class PaikanPisteetTest {
     private Sitsit sitsit;
     private Paikka paikka;
     private PaikanPisteet pisteet;
+    private Laskin laskin;
 
     public PaikanPisteetTest() {
     }
 
     @Before
     public void setUp() {
+        this.laskin = new Laskin();
         this.random = new RandomGenerator();
         this.sitsit = new Sitsit(1);
     }
@@ -41,7 +43,7 @@ public class PaikanPisteetTest {
 
             for (int j = 0; j < 10; j++) {
                 this.paikka = palautaYhteydellinenSitsaaja();
-                this.pisteet = new PaikanPisteet(this.paikka);
+                this.pisteet = new PaikanPisteet(this.paikka, this.laskin);
 
                 double pointsit = this.pisteet.palautaPisteet();
                 if (pointsit != 0) {
@@ -103,52 +105,52 @@ public class PaikanPisteetTest {
 
         heikki.setYhteys(tero, 4);
 
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1), this.laskin);
         assertEquals(4, this.pisteet.palautaPisteet(), 0.01);
 
         heikki.setYhteys(milla, 1);
         
         System.out.println("kaksi");
 
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1), this.laskin);
         assertEquals(4 + 1 / Math.hypot(1, 1), this.pisteet.palautaPisteet(), 0.01);
 
         heikki.setYhteys(hilla, 4);
         
         System.out.println("kolme");
 
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1), this.laskin);
         assertEquals(1.0 * 4 + 1.0 / Math.hypot(1, 1) + 4, this.pisteet.palautaPisteet(), 0.01);
 
         heikki.setYhteys(nukke, 3);
         
         System.out.println("4");
 
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1), this.laskin);
         assertEquals(1.0 * 4 + 1.0 / Math.hypot(1, 1) + 4 + 3.0 / Math.hypot(1, 2), this.pisteet.palautaPisteet(), 0.01);
 
         heikki.setYhteys(testi, -5);
 
         System.out.println("5");
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1), this.laskin);
         assertEquals(1.0 * 4 + 1 / Math.hypot(1, 1) + 4 + 1.0 * 3 / Math.hypot(1, 2) - 1.0 * 5 / 2, this.pisteet.palautaPisteet(), 0.01);
 
         heikki.setYhteys(tyyppi, -3);
         
         System.out.println("6");
 
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1), this.laskin);
         assertEquals(1.0 * 4 + 1 / Math.hypot(1, 1) + 4 + 3 / Math.hypot(1, 2) - 1.0 * 5 / 2 - 1.0 * 3 / Math.hypot(1, 3), this.pisteet.palautaPisteet(), 0.01);
 
         heikki.setYhteys(vaan, 2);
         
         System.out.println("7");
 
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(1), this.laskin);
         assertEquals(1.0 * 4 + 1 / Math.hypot(1, 1) + 4 + 3 / Math.hypot(1, 2) - 1.0 * 5 / 2 - 1.0 * 3 / Math.hypot(1, 3) + 1.0 * 2 / 3, this.pisteet.palautaPisteet(), 0.01);
 
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(0));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(0), this.laskin);
         assertTrue(this.pisteet.palautaPisteet() == 0);
     }
 
@@ -211,50 +213,50 @@ public class PaikanPisteetTest {
         
         nukke.setYhteys(tero, 4);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2, this.pisteet.palautaPisteet(), 0.01);
         
         nukke.setYhteys(milla, 1);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2 + 1, this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(hilla, 4);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1), this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(heikki, 3);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2), this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(testi, -5);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2) - 5, this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(tyyppi, -3);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2) - 5 - 3.0, this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(vaan, -2);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2) - 5 - 3.0 - 2.0 / Math.hypot(1, 3), this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(pallo, -5);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2) - 5 - 3.0 - 2.0 / Math.hypot(1, 3) - 5.0 / Math.hypot(1, 1), this.pisteet.palautaPisteet() , 0.01);
         
         nukke.setYhteys(piilo, 3);
         
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(6), this.laskin);
         assertEquals(2 + 1 + 4 / Math.hypot(1, 1) + 1.0 * 3 / Math.hypot(1, 2) - 5 - 3.0 - 2.0 / Math.hypot(1, 3) - 5.0 / Math.hypot(1, 1) + 3.0 / Math.hypot(1, 2), this.pisteet.palautaPisteet() , 0.01);
                 
-        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(2));
+        this.pisteet = new PaikanPisteet(this.sitsit.getPaikka(2), this.laskin);
         assertTrue(this.pisteet.palautaPisteet() == 0);
     }
     private Paikka palautaYhteydellinenSitsaaja() {
