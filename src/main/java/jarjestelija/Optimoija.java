@@ -2,7 +2,7 @@ package jarjestelija;
 
 import Pisteyttaja.Pisteet;
 import java.text.DecimalFormat;
-import omatTietorakenteet.HashMap;
+import omatTietorakenteet.Hakemisto;
 import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
@@ -16,7 +16,7 @@ public class Optimoija {
     private Pisteet pisteet;
     private long aika;
     private double VanhassaPisteita;
-    private HashMap<Paikka, Sitsaaja> vanhatPaikat;
+    private Hakemisto<Paikka, Sitsaaja> vanhatPaikat;
     private final int sitsaajienMaara;
     private boolean muutosOnTapahtunut;
     private final DecimalFormat dtime;
@@ -40,7 +40,7 @@ public class Optimoija {
         this.dtime = new DecimalFormat("#.##");
     }
 
-    public HashMap<Paikka, Sitsaaja> optimoiIstumapaikat(int sekunttia) {
+    public Hakemisto<Paikka, Sitsaaja> optimoiIstumapaikat(int sekunttia) {
         alustaJuttuja();
 
         this.aika = System.currentTimeMillis();
@@ -104,7 +104,7 @@ public class Optimoija {
 
     private void alustaVaihtoaVarten() {
         this.VanhassaPisteita = this.pisteet.palautaPisteet();
-        this.vanhatPaikat = this.sitsit.palautaPaikat();
+        this.vanhatPaikat = this.sitsit.palautaPaikkaSitsaajaParit();
 
     }
 

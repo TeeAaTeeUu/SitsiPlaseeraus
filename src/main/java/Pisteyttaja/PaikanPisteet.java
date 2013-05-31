@@ -1,6 +1,6 @@
 package Pisteyttaja;
 
-import omatTietorakenteet.HashMap;
+import omatTietorakenteet.Hakemisto;
 import java.util.Map;
 import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Paikka;
@@ -9,7 +9,7 @@ import sitsiplaseeraus.Sitsaaja;
 public class PaikanPisteet {
 
     private Paikka paikka;
-    private HashMap<Sitsaaja, Integer> yhteydet;
+    private Hakemisto<Sitsaaja, Integer> yhteydet;
     private Paikka kohdePaikka;
     private int kohteidenErotus;
     private boolean onYhteyksia;

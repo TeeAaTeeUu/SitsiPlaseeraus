@@ -3,7 +3,7 @@ package sitsiplaseeraus.random;
 import jarjestelija.Jarjestaja;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import omatTietorakenteet.HashMap;
+import omatTietorakenteet.Hakemisto;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;

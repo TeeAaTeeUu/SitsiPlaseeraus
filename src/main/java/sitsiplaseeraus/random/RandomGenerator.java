@@ -1,21 +1,28 @@
 package sitsiplaseeraus.random;
 
 import omatTietorakenteet.ArrayList;
-import omatTietorakenteet.HashMap;
+import omatTietorakenteet.Hakemisto;
 import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 
+/**
+ * Hoitaa kolmea asiaa: satunnaisten nimien luomista, niiden käyttämistä satunnaisen sitsin luomiseen sekä sitsaajien ja yhteyksien tulostamiseen.
+ */
 public class RandomGenerator {
 
+    /**
+     * Tulostaa sitsaajien väliset yhteydet, eli kuka pitää kenestäkin ja miten paljon.
+     * @param sitsit Josta tiedot tutkitaan
+     */
     public static void tulostaYhteydet(Sitsit sitsit) {
         System.out.println("\n" + "Yhteydet" + "\n");
 
-        HashMap<Sitsaaja, HashMap> kaikkiYhteydet = sitsit.palautaYhteydet();
+        Hakemisto<Sitsaaja, Hakemisto> kaikkiYhteydet = sitsit.palautaYhteydet();
         int moneskoYhteys = 0;
         int moneskoSitsaaja = 0;
         int moneskoyhteydellinen = 0;
-        for (Vektori<Sitsaaja, HashMap> sitsaajanYhteydet : kaikkiYhteydet) {
+        for (Vektori<Sitsaaja, Hakemisto> sitsaajanYhteydet : kaikkiYhteydet) {
             Sitsaaja sitsaaja = (Sitsaaja) sitsaajanYhteydet.getKey();
 
             if (sitsaaja.avecIsSet()) {
@@ -25,7 +32,7 @@ public class RandomGenerator {
                 System.out.println(sitsaaja.getNimi() + " haluaa olla sitsaajan " + sitsaaja.getPuoliso().getNimi() + " puoliso");
             }
 
-            HashMap<Sitsaaja, Integer> yhteydet = (HashMap<Sitsaaja, Integer>) sitsaajanYhteydet.getValue();
+            Hakemisto<Sitsaaja, Integer> yhteydet = (Hakemisto<Sitsaaja, Integer>) sitsaajanYhteydet.getValue();
             moneskoSitsaaja++;
             boolean eka = true;
             for (Vektori<Sitsaaja, Integer> yhteys : yhteydet) {
@@ -42,6 +49,10 @@ public class RandomGenerator {
         System.out.println("\n" + "----" + moneskoYhteys + "-" + moneskoSitsaaja + "-" + moneskoyhteydellinen + "--" + "\n");
     }
 
+    /**
+     * Tulostaa sitsaajat heidän oikeassa järjestyksessään pöydittäin
+     * @param sitsit Josta tiedot tutkitaan
+     */
     public static void tulostaSitsaajat(Sitsit sitsit) {
         System.out.println("\n" + "Sitsaajat" + "\n");
 
@@ -80,14 +91,25 @@ public class RandomGenerator {
         }
     }
 
-    public String palautaNimi(Boolean nainen) {
-        if (nainen == true) {
+    /**
+     * Luo koko nimen, joko miehen tai naisen
+     * @param mies Onko mies vai ei
+     * @return Naisen tai miehen koko nimen
+     */
+    public String palautaNimi(Boolean mies) {
+        if (mies == false) {
             return this.nimet.palautaEtunimiNaisen() + " " + this.nimet.palautaSukunimi();
         } else {
             return this.nimet.palautaEtunimiMiehen() + " " + this.nimet.palautaSukunimi();
         }
     }
 
+    /**
+     * Täyttää sitsit satunnaisilla tiedoilla, eli lisää halutun määrän sitsaajia ja heidän välisiä yhteyksiä sekä avecit ja puolisot
+     * @param montakoSitsaajaa
+     * @param montakoYhteytta
+     * @param sitsit
+     */
     public void taytaRandomDatalla(int montakoSitsaajaa, int montakoYhteytta, Sitsit sitsit) {
         this.lisaaNimia(montakoSitsaajaa, sitsit);
 
@@ -98,7 +120,7 @@ public class RandomGenerator {
         }
     }
 
-    protected void lisaaNimia(int montakoSitsaajaa, Sitsit sitsit) {
+    private void lisaaNimia(int montakoSitsaajaa, Sitsit sitsit) {
         for (int i = 0; i < montakoSitsaajaa; i++) {
             int kumpi = Random.luo(1);
 

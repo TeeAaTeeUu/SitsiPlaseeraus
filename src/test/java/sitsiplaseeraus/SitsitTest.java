@@ -95,9 +95,5 @@ public class SitsitTest {
         sitsit.getPaikka(6).getSitsaaja().setYhteys(sitsit.getPaikka(1).getSitsaaja(), 4);
         
         assertEquals(3, sitsit.yhteyksienMaara());
-        
-        sitsit.deleteSitsaaja(sitsit.getPaikka(6).getSitsaaja());
-        
-         assertEquals(1, sitsit.yhteyksienMaara());
     }
 }

@@ -4,8 +4,16 @@ import omatTietorakenteet.ArrayList;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 
-class Yhteydet {
+/**
+ * Hoitaa sitsaajien välisten satunnaisten yhteyksien luomista
+ */
+public class Yhteydet {
 
+    /**
+     * Lisää sitseille halutun verran yhteyksiä sitsaajien välille, satunnaisilla arvoilla (viha rai tykkäys)
+     * @param montakoYhteytta
+     * @param sitsit
+     */
     protected static void lisaaYhteyksia(int montakoYhteytta, Sitsit sitsit) {
         ArrayList<Sitsaaja> sitsaajat = sitsit.getSitsaajat();
         if (sitsit.yhteyksienMaara() > 0) {
@@ -63,6 +71,12 @@ class Yhteydet {
         }
     }
 
+    /**
+     * Palauttaa listalta satunnaisen sitsaajan, joka on eri kuin parametrina annettu
+     * @param eriSitsaaja kenen kanssa eri palautetaan
+     * @param sitsaajat lista
+     * @return satunnainen sitsaaja
+     */
     protected static Sitsaaja annaToinenRandomSitsaaja(Sitsaaja eriSitsaaja, ArrayList<Sitsaaja> sitsaajat) {
         Sitsaaja sitsaaja = annaRandomSitsaaja(sitsaajat);
         if (sitsaaja.getNimi().equals(eriSitsaaja.getNimi())) {
@@ -72,6 +86,11 @@ class Yhteydet {
         }
     }
 
+    /**
+     * Palauttaa satunnaisen sitsaajan annetusta listasta
+     * @param sitsaajat Lista
+     * @return Satunnainen sitsaaja
+     */
     protected static Sitsaaja annaRandomSitsaaja(ArrayList<Sitsaaja> sitsaajat) {
         int moneskoSitsaaja = Random.luo(sitsaajat.size() - 1);
         return sitsaajat.get(moneskoSitsaaja);

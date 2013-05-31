@@ -2,15 +2,25 @@ package sitsiplaseeraus.random;
 
 import omatTietorakenteet.ArrayList;
 
+/**
+ * Sisältää miehen etunimiä
+ */
 public class EtunimetMiehen{
 
     ArrayList<String> etunimet;
 
+    /**
+     * Alustaa käyttöön
+     */
     public EtunimetMiehen() {
         etunimet = new ArrayList<String>();
         this.lisaaEtunimet();
     }
 
+    /**
+     * Palauttaa satunnaisen etunimen
+     * @return Miehen etunimen
+     */
     public String palautaEtunimi() {
         int koko = this.etunimet.size();
         int random = Random.luo(koko - 1);

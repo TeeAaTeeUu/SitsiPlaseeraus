@@ -1,5 +1,10 @@
 package omatTietorakenteet;
 
+/**
+ * Hakemiston foreach läpikäymiseen luotu, sisältää vain avain ja arvo parin.
+ * @param <K>
+ * @param <V>
+ */
 public class Vektori<K, V> {
     private K key;
     private V value;

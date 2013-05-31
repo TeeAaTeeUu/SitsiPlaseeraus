@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import omatTietorakenteet.ArrayList;
-import omatTietorakenteet.HashMap;
+import omatTietorakenteet.Hakemisto;
 import java.util.Map;
 import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Sitsaaja;
@@ -14,13 +14,13 @@ public class TiedostonKasittelija {
 
     private final String file;
     private Sitsaaja sitsaaja;
-    private HashMap<Sitsaaja, HashMap> yhteydet;
-    private HashMap<String, Sitsaaja> sitsaajat;
+    private Hakemisto<Sitsaaja, Hakemisto> yhteydet;
+    private Hakemisto<String, Sitsaaja> sitsaajat;
     private String[] tiedot;
-    private HashMap<Sitsaaja, Integer> yhteys;
+    private Hakemisto<Sitsaaja, Integer> yhteys;
     private Sitsaaja kohdeSitsaaja;
-    private HashMap<Sitsaaja, Integer> valiaikainenMap;
-    private HashMap<Sitsaaja, HashMap> palautettavaMap;
+    private Hakemisto<Sitsaaja, Integer> valiaikainenMap;
+    private Hakemisto<Sitsaaja, Hakemisto> palautettavaMap;
     private ArrayList<Sitsaaja> sitsaajatLista;
     private int poytienMaara;
     private ArrayList<Integer> poytienKoot;
@@ -32,7 +32,7 @@ public class TiedostonKasittelija {
         this.alustaLuokat();
     }
 
-    public HashMap<Sitsaaja, HashMap> getYhteydet() {
+    public Hakemisto<Sitsaaja, Hakemisto> getYhteydet() {
         return yhteydet;
     }
 
@@ -175,11 +175,11 @@ public class TiedostonKasittelija {
     }
 
     private void alustaLuokat() {
-        yhteydet = new HashMap<Sitsaaja, HashMap>();
-        sitsaajat = new HashMap<String, Sitsaaja>();
-        yhteys = new HashMap<Sitsaaja, Integer>();
-        valiaikainenMap = new HashMap<Sitsaaja, Integer>();
-        palautettavaMap = new HashMap<Sitsaaja, HashMap>();
+        yhteydet = new Hakemisto<Sitsaaja, Hakemisto>();
+        sitsaajat = new Hakemisto<String, Sitsaaja>();
+        yhteys = new Hakemisto<Sitsaaja, Integer>();
+        valiaikainenMap = new Hakemisto<Sitsaaja, Integer>();
+        palautettavaMap = new Hakemisto<Sitsaaja, Hakemisto>();
         sitsaajatLista = new ArrayList<Sitsaaja>();
         poytienKoot = new ArrayList<Integer>();
     }

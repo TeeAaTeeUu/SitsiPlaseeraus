@@ -1,15 +1,20 @@
 package omatTietorakenteet;
 
-public class HashMap<K, V> implements Iterable<Vektori> {
+/**
+ * Ulkoisesti toimii kuin Javan oma Hakemisto (melkein), mutta toteutus on vain tällä hetkellä normaali hakemisto. Luodaan vielä se oikea Hakemisto myöhemmin.
+ * @param <K>
+ * @param <V>
+ */
+public class Hakemisto<K, V> implements Iterable<Vektori> {
 
     private Object[] avainVarasto;
     private Object[] arvoVarasto;
     private int alkukoko = 15;
     private int mahtuu;
     private int koko;
-    public HashMap tama = this;
+    public Hakemisto tama = this;
 
-    public HashMap() {
+    public Hakemisto() {
         avainVarasto = new Object[alkukoko];
         arvoVarasto = new Object[alkukoko];
         mahtuu = alkukoko;
@@ -40,14 +45,14 @@ public class HashMap<K, V> implements Iterable<Vektori> {
 
     public K getAvainIndexilla(int i) {
         if (i > koko || i < 0) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet.");
         }
         return (K) avainVarasto[i];
     }
 
     public V getArvoIndexilla(int i) {
         if (i > koko || i < 0) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            throw new UnsupportedOperationException("Not supported yet.");
         }
         return (V) arvoVarasto[i];
     }
@@ -60,6 +65,20 @@ public class HashMap<K, V> implements Iterable<Vektori> {
     public Vektori<K, V> getVektoriArvolla(V value) {
         int monesko = getAvainIndexArvolla(value);
         return new Vektori<K, V>((K) avainVarasto[monesko], (V) arvoVarasto[monesko]);
+    }
+    
+    /**
+     * Otetaan vielä parempaan käyttöön itse ohjelmassa, lisää vain loppuun tiedot eikä varmista löytyykö samanlaista jo aiemmin.
+     * @param key
+     * @param value
+     */
+    public void add(K k, V v) {
+            if (koko == mahtuu - 2) {
+                kasvata();
+            }
+            avainVarasto[koko] = (K) k;
+            arvoVarasto[koko] = (V) v;
+            koko++;
     }
 
     public boolean put(K k, V v) {
@@ -176,12 +195,6 @@ public class HashMap<K, V> implements Iterable<Vektori> {
             }
         }
         return false;
-    }
-
-    public void remove(int i) {
-        if (i > koko || i < 0) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
     }
 
     public java.util.Iterator<Vektori> iterator() {

@@ -1,5 +1,9 @@
 package omatTietorakenteet;
 
+/**
+ * Toimii kuin Javan oma ArrayList niiltä osin, kuin niitä metodeja olen tarvinnut.
+ * @param <E>
+ */
 public class ArrayList<E> implements Iterable<E> {
 
     private Object[] varasto;
@@ -66,8 +70,12 @@ public class ArrayList<E> implements Iterable<E> {
         return false;
     }
 
-    public void remove(int i) {
-        if (i > koko || i < 0) {
+    /**
+     * Vielä toteuttamatta
+     * @param monesko
+     */
+    public void remove(int monesko) {
+        if (monesko > koko || monesko < 0) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }

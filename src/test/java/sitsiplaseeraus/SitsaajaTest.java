@@ -19,8 +19,6 @@ public class SitsaajaTest {
     @Test
     public void nimiToimii() {
         assertEquals("Testi Nukke", sitsaaja.getNimi());
-        sitsaaja.setNimi("Nukke Testi2");
-        assertEquals("Nukke Testi2", sitsaaja.getNimi());
     }
     
     @Test

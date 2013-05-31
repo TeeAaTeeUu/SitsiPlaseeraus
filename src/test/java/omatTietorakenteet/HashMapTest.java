@@ -17,7 +17,7 @@ public class HashMapTest {
 
     @Test
     public void tiedonTallentaminenToimii() {
-        HashMap<String, Double> varasto = new HashMap<String, Double>();
+        Hakemisto<String, Double> varasto = new Hakemisto<String, Double>();
         
         varasto.put("jotain soopaa", 14.646);
        
@@ -29,7 +29,7 @@ public class HashMapTest {
     
     @Test
     public void kokoOnOikea() {
-        HashMap<String, Double> varasto = new HashMap<String, Double>();
+        Hakemisto<String, Double> varasto = new Hakemisto<String, Double>();
 
         assertEquals(0, varasto.size());
 
@@ -40,7 +40,7 @@ public class HashMapTest {
     
     @Test
     public void forEachToimii() {
-        HashMap<Integer, String> hakemisto = new HashMap<Integer, String> ();
+        Hakemisto<Integer, String> hakemisto = new Hakemisto<Integer, String> ();
 
         hakemisto.put(7, "moikka");
         hakemisto.put(4, "heippa");
@@ -74,7 +74,7 @@ public class HashMapTest {
     
     @Test
     public void forEachToimiiTyhjana() {
-        HashMap<Sitsaaja, Integer> luvut = new HashMap<Sitsaaja, Integer>();
+        Hakemisto<Sitsaaja, Integer> luvut = new Hakemisto<Sitsaaja, Integer>();
 
         int i = 0;
         for (Vektori<Sitsaaja, Integer> vektori : luvut) {
@@ -94,7 +94,7 @@ public class HashMapTest {
     
     @Test
     public void suurenDataMaaranLisaaminenOnnistuu() {
-        HashMap<Integer, String> hakemisto = new HashMap<Integer, String> ();
+        Hakemisto<Integer, String> hakemisto = new Hakemisto<Integer, String> ();
         
         for (int i = 0; i < 2000; i++) {
             hakemisto.put(Random.luo(5000), "moo");

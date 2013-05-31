@@ -2,15 +2,25 @@ package sitsiplaseeraus.random;
 
 import omatTietorakenteet.ArrayList;
 
+/**
+ * Sisältää paljon erilaisia sukunimiä
+ */
 public class Sukunimet{
 
     ArrayList<String> sukunimet;
 
+    /**
+     * Alustaa käyttöön
+     */
     public Sukunimet() {
         sukunimet = new ArrayList<String>();
         this.lisaaSukunimet();
     }
 
+    /**
+     * Palauttaa satunnaisen sukunimen
+     * @return Sukunimi
+     */
     public String palautaSukunimi() {
         int koko = this.sukunimet.size();
         int random = Random.luo(koko - 1);
