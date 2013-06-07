@@ -2,6 +2,7 @@ package jarjestelija;
 
 import Pisteyttaja.Pisteet;
 import java.text.DecimalFormat;
+import omatTietorakenteet.ArrayList;
 import omatTietorakenteet.Hakemisto;
 import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsaaja;
@@ -25,10 +26,16 @@ public class Optimoija {
     private int kuinkaMontaVaihtoa;
     private int vaihtojenMaksimiMaara;
     private int epaOnnistumisia;
+    private final SukupuoliJarjestaja sukupuoliJarjestaja;
+    private ArrayList<Sitsaaja> sitsaajat;
+    private ArrayList<Paikka> paikat;
+    private ArrayList<Sitsaaja> naiset;
+    private ArrayList<Sitsaaja> miehet;
+    private ArrayList<Paikka> naisenPaikat;
+    private ArrayList<Paikka> miehenPaikat;
 
     public Optimoija(Sitsit sitsit) {
         this.sitsit = sitsit;
-
         this.sitsit.lisaaPaikoilleTiedotAvecinJaPuolisonPaikoista();
 
         this.jarjestelija = new Jarjestaja(this.sitsit);
@@ -38,6 +45,8 @@ public class Optimoija {
         this.sitsaajienMaara = this.sitsit.sitsaajienMaara();
 
         this.dtime = new DecimalFormat("#.##");
+
+        this.sukupuoliJarjestaja = new SukupuoliJarjestaja(sitsit);
     }
 
     public Hakemisto<Paikka, Sitsaaja> optimoiIstumapaikat(int sekunttia) {
@@ -178,13 +187,70 @@ public class Optimoija {
     private void alustaJuttuja() {
         this.parempiLoytyi = true;
         this.epaOnnistumisia = 0;
+
+        sijoitaAlkupaikat();
+
+        this.pisteet.alustaSitsaajat();
+
+        RandomGenerator.tulostaSitsaajat(sitsit);
+    }
+
+    private void sijoitaAlkupaikat() {
+        sukupuoliJarjestaja.jarjestaPaikatSukupuolittain();
+        alustaJaTyhjenna();
         
-        for (int i = 0; i < this.sitsaajienMaara * 3; i++) {
-            this.jarjestelija.vaihdaRandom();
+        asetaSitsaajatPaikoilleen();
+    }
+
+    private void lisaaSukupuoliPaikat() {
+        this.naisenPaikat = new ArrayList<Paikka>();
+        this.miehenPaikat = new ArrayList<Paikka>();
+        for (Paikka paikka : paikat) {
+            if (paikka.isMiehenPaikka()) {
+                this.miehenPaikat.add(paikka);
+            } else {
+                this.naisenPaikat.add(paikka);
+            }
+        }
+    }
+
+    private void lisaaSukupuolet() {
+        this.naiset = new ArrayList<Sitsaaja>();
+        this.miehet = new ArrayList<Sitsaaja>();
+        for (Sitsaaja sitsaaja : sitsaajat) {
+            if (sitsaaja.isMies()) {
+                this.miehet.add(sitsaaja);
+            } else {
+                this.naiset.add(sitsaaja);
+            }
+        }
+    }
+
+    private void alustaJaTyhjenna() {
+        this.sitsaajat = this.sitsit.getSitsaajat();
+        this.paikat = this.sitsit.getPaikat();
+        
+        for (Paikka paikka : paikat) {
+            paikka.setSitsaaja(null);
+        }
+
+        for (Sitsaaja sitsaaja : sitsaajat) {
+            sitsaaja.setPaikka(null);
+        }
+    }
+
+    private void asetaSitsaajatPaikoilleen() {
+        lisaaSukupuolet();
+        lisaaSukupuoliPaikat();
+        
+        for (int i = 0; i < naiset.size(); i++) {
+            System.out.println(i);
+            naisenPaikat.get(i).setSitsaaja(naiset.get(i));
         }
         
-        this.pisteet.alustaSitsaajat();
-        
-        RandomGenerator.tulostaSitsaajat(sitsit);
+        for (int i = 0; i < miehet.size(); i++) {
+            System.out.println(i);
+            miehenPaikat.get(i).setSitsaaja(miehet.get(i));
+        }
     }
 }

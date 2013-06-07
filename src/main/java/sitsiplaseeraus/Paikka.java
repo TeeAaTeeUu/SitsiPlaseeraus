@@ -11,6 +11,7 @@ public class Paikka {
     private Paikka naisenAvecinPaikka;
     private Paikka puolisonPaikka;
     private Paikka miehenAvecinPaikka;
+    private boolean miehenPaikka;
 
     /**
      * Alustaa pöydän paikoilleen
@@ -108,6 +109,14 @@ public class Paikka {
      */
     public Paikka getMiehenAvecinPaikka() {
         return miehenAvecinPaikka;
+    }
+
+    public boolean isMiehenPaikka() {
+        return miehenPaikka;
+    }
+
+    public void setMiehenPaikka(boolean miehenPaikka) {
+        this.miehenPaikka = miehenPaikka;
     }
     
 }

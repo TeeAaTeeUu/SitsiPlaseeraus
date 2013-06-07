@@ -1,7 +1,6 @@
 package Pisteyttaja;
 
 import omatTietorakenteet.Hakemisto;
-import java.util.Map;
 import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsaaja;
@@ -33,14 +32,14 @@ public class PaikanPisteet {
 
         this.avec = false;
         this.puoliso = false;
-        
+
         pariPisteet = 0.0;
         sukupuoliPisteet = 0.0;
         yhteysPisteet = 0.0;
 
         pariPisteet += this.tarkistaAvecJaPuoliso();
         sukupuoliPisteet += this.tarkistaYmparillaOlevienSukupuolet();
-        
+
 
         for (Vektori<Sitsaaja, Integer> yhteys : yhteydet) {
             this.onYhteyksia = true;
@@ -56,7 +55,7 @@ public class PaikanPisteet {
                 yhteysPisteet += this.palautaPisteet(arvo, kohteidenErotus, this.paikka.getPaikka());
             }
         }
-        
+
         return pariPisteet + sukupuoliPisteet + yhteysPisteet;
     }
 
@@ -225,45 +224,62 @@ public class PaikanPisteet {
     }
 
     private double tarkistaYmparillaOlevienSukupuolet() {
-        int miestenMaara = 0;
+
         int tarkeys = 500;
-        int sukupuolettomat = 0;
+        int pisteita = 0;
+        boolean mies = false;
+        
+        try {
+        if (paikka.getSitsaaja().isMies()) {
+            mies = true;
+        } else {
+            mies = false;
+        }
+        } catch (UnsupportedOperationException e) {
+        }
 
         try {
             if (paikka.getMiehenAvecinPaikka() != null) {
                 if (paikka.getMiehenAvecinPaikka().getSitsaaja().isMies()) {
-                    miestenMaara++;
+                    if (mies == false) {
+                        pisteita += 500;
+                    }
+                } else {
+                    if (mies == true) {
+                        pisteita += 500;
+                    }
                 }
             }
         } catch (UnsupportedOperationException e) {
-            sukupuolettomat++;
         }
         try {
             if (paikka.getNaisenAvecinPaikka() != null) {
                 if (paikka.getNaisenAvecinPaikka().getSitsaaja().isMies()) {
-                    miestenMaara++;
+                    if (mies == false) {
+                        pisteita += 500;
+                    }
+                } else {
+                    if (mies == true) {
+                        pisteita += 500;
+                    }
                 }
             }
         } catch (UnsupportedOperationException e) {
-            sukupuolettomat++;
         }
         try {
             if (paikka.getPuolisonPaikka() != null) {
                 if (paikka.getPuolisonPaikka().getSitsaaja().isMies()) {
-                    miestenMaara++;
+                    if (mies == false) {
+                        pisteita += 500;
+                    }
+                } else {
+                    if (mies == true) {
+                        pisteita += 500;
+                    }
                 }
             }
         } catch (UnsupportedOperationException e) {
-            sukupuolettomat++;
         }
-        try {
-            if (paikka.getSitsaaja().isMies()) {
-                return (3 - miestenMaara - sukupuolettomat) * tarkeys;
-            } else {
-                return miestenMaara * tarkeys;
-            }
-        } catch (UnsupportedOperationException e) {
-        }
-        return 0.0;
+        return pisteita;
     }
 }

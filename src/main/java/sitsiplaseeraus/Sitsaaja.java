@@ -4,7 +4,9 @@ import omatTietorakenteet.Hakemisto;
 import omatTietorakenteet.Vektori;
 
 /**
- * Sisältää kaiken mitä sitsaajan tarvitsee tietää itsestään ja mieltymyksistään. Myös paikan johon hänet on laitettu, jos tämä on hänelle kerrottu :)
+ * Sisältää kaiken mitä sitsaajan tarvitsee tietää itsestään ja
+ * mieltymyksistään. Myös paikan johon hänet on laitettu, jos tämä on hänelle
+ * kerrottu :)
  */
 public class Sitsaaja {
 
@@ -19,6 +21,7 @@ public class Sitsaaja {
 
     /**
      * Luo sitsaajan annetulla nimellä
+     *
      * @param nimi
      */
     public Sitsaaja(String nimi) {
@@ -33,6 +36,7 @@ public class Sitsaaja {
 
     /**
      * Luo sitsaajan annetulla nimellä ja sukupuolella
+     *
      * @param nimi nimi
      * @param mies Jos true, niin mies, jos false niin nainen
      */
@@ -43,6 +47,7 @@ public class Sitsaaja {
 
     /**
      * Palauttaa nimen
+     *
      * @return nimi
      */
     public String getNimi() {
@@ -51,6 +56,7 @@ public class Sitsaaja {
 
     /**
      * Onko mies vai nainen
+     *
      * @return true jos mies, false jos nainen
      */
     public boolean isMies() {
@@ -73,6 +79,7 @@ public class Sitsaaja {
 
     /**
      * Asettaa sitsaajalle avecin, voi olla hetero tai homopari
+     *
      * @param avec Sitsaaja
      */
     public void setAvec(Sitsaaja avec) {
@@ -82,6 +89,7 @@ public class Sitsaaja {
 
     /**
      * Palauttaa avecin
+     *
      * @return Sitsaaja
      */
     public Sitsaaja getAvec() {
@@ -90,6 +98,7 @@ public class Sitsaaja {
 
     /**
      * Palauttaa puolison
+     *
      * @return Sitsaaja
      */
     public Sitsaaja getPuoliso() {
@@ -98,6 +107,7 @@ public class Sitsaaja {
 
     /**
      * Asettaa sitsaajalle puolison, voi olla hetero- tai homopari
+     *
      * @param puoliso
      */
     public void setPuoliso(Sitsaaja puoliso) {
@@ -107,6 +117,7 @@ public class Sitsaaja {
 
     /**
      * palauttaa paikan jossa istuu, jos kerrottu
+     *
      * @return Paikka luokka
      */
     public Paikka getPaikka() {
@@ -115,6 +126,7 @@ public class Sitsaaja {
 
     /**
      * Palauttaa paikan, jossa luulee istuvansa
+     *
      * @param paikka Paikka luokka
      */
     public void setPaikka(Paikka paikka) {
@@ -123,6 +135,7 @@ public class Sitsaaja {
 
     /**
      * onko sitsaajalla avecia
+     *
      * @return true tai false
      */
     public boolean avecIsSet() {
@@ -135,6 +148,7 @@ public class Sitsaaja {
 
     /**
      * onko sitsaajalla puolisoa
+     *
      * @return true tai false
      */
     public boolean puolisoIsSet() {
@@ -146,7 +160,9 @@ public class Sitsaaja {
     }
 
     /**
-     * Asettaa yhteyden sitsaajalle, eli kenestä toisesta sitsaajasta pitää tai vihaa
+     * Asettaa yhteyden sitsaajalle, eli kenestä toisesta sitsaajasta pitää tai
+     * vihaa
+     *
      * @param sitsaaja
      * @param arvo kuinka paljon vihaa tai rakastaa, väliltä -5 ja 5
      * @return jos arvo oli huono niin false, muuten true
@@ -161,6 +177,7 @@ public class Sitsaaja {
 
     /**
      * Poistaa yhteyden sitsaajalta, jos sellainen on olemassa
+     *
      * @param sitsaaja
      * @return onnistuiko vai ei
      */
@@ -175,6 +192,7 @@ public class Sitsaaja {
 
     /**
      * Palauttaa sitsaajan kaikki yhteydet
+     *
      * @return yhteydet
      */
     public Hakemisto<Sitsaaja, Integer> palautaYhteydet() {
@@ -183,6 +201,7 @@ public class Sitsaaja {
 
     /**
      * Kuinka paljon sitsaajalla on yhteyksiä muihin sitsaajiin
+     *
      * @return määrä
      */
     public int yhteyksienMaara() {
@@ -191,5 +210,40 @@ public class Sitsaaja {
             yhteyksienMaara++;
         }
         return yhteyksienMaara;
+    }
+
+    public boolean heteroPari() {
+        if (avecIsSet == false && puolisoIsSet == false) {
+            return false;
+        }
+        if (avecIsSet) {
+            if (isMies()) {
+                if (getAvec().isMies()) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                if (getAvec().isMies()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            if (isMies()) {
+                if (getAvec().isMies()) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                if (getAvec().isMies()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
     }
 }

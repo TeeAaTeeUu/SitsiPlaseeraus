@@ -39,7 +39,7 @@ public class Jarjestaja {
         } else {
             do {
                 ekaKohdePaikka = sitsit.getPaikka(Random.luo(sitsit.sitsaajienMaara() - 1));
-            } while (ekaPaikka.equals(ekaKohdePaikka) || PaikanPisteet.tarkistaAvecJaPuoliso(ekaKohdePaikka) > 0);
+            } while (ekaPaikka.equals(ekaKohdePaikka) || PaikanPisteet.tarkistaAvecJaPuoliso(ekaKohdePaikka) > 0 || ekaPaikka.isMiehenPaikka() != ekaKohdePaikka.isMiehenPaikka());
 
             return this.vaihdaPaikat();
         }
@@ -80,7 +80,7 @@ public class Jarjestaja {
             tokaKohdePaikka = getTokaKohdePaikka(millainenPari);
         } while (tokaKohdePaikka == null || ekaPaikka.equals(ekaKohdePaikka) || tokaPaikka.equals(ekaKohdePaikka) || ekaPaikka.equals(tokaKohdePaikka)
                 || tokaPaikka.equals(tokaKohdePaikka) || PaikanPisteet.tarkistaAvecJaPuoliso(ekaKohdePaikka) > 0
-                || PaikanPisteet.tarkistaAvecJaPuoliso(tokaKohdePaikka) > 0);
+                || PaikanPisteet.tarkistaAvecJaPuoliso(tokaKohdePaikka) > 0 || ekaPaikka.isMiehenPaikka() != ekaKohdePaikka.isMiehenPaikka());
 
         this.ekaKohdeSitsaaja = this.ekaKohdePaikka.getSitsaaja();
         this.tokaKohdeSitsaaja = this.tokaKohdePaikka.getSitsaaja();

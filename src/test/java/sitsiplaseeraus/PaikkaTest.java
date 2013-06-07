@@ -107,4 +107,13 @@ public class PaikkaTest {
         assertEquals(false, paikka.getSitsaaja().equals(testSitsaaja));
         assertEquals(testSitsaaja2, paikka.getSitsaaja());
     }
+    
+    @Test
+    public void miehenPaikanAsettaminenToimii() {
+        paikka.setMiehenPaikka(true);
+        assertEquals(true, paikka.isMiehenPaikka());
+        
+        paikka.setMiehenPaikka(false);
+        assertEquals(false, paikka.isMiehenPaikka());
+    }
 }

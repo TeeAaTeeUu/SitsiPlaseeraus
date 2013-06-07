@@ -20,10 +20,10 @@ public class Laskin {
         } else if(x == 1.0) {
             luku = this.varasto.getAvainIndexAvaimella(y);
             if(luku >= 0) {
-                return this.varasto.getAvainIndexilla(luku);
+                return this.varasto.getArvoIndexilla(luku);
             } else {
                 this.varasto.add(y, Math.hypot(x, y));
-                return this.varasto.getAvainIndexilla(luku);
+                return this.varasto.getArvo(y);
             }
         }
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
