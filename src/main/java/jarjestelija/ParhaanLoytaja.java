@@ -1,13 +1,17 @@
 package jarjestelija;
 
 import omatTietorakenteet.Hakemisto;
-import java.util.Map;
 import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.random.RandomGenerator;
 
+/**
+ * Toimii paikallisten maksimien hallinoijana, eli aloittaa aina uuden satunnaisen optimoidun paikan haun ja vertaa, josko tämänkertainen olisi parempi kuin edelliset.
+ * 
+ * Pitää kirjaa parhaasta löydetystä järjestyksestä samalla, kun parempia yritetään löytää tyhjästä alkaen.
+ */
 public class ParhaanLoytaja {
 
     private Optimoija optimoija;
@@ -21,6 +25,10 @@ public class ParhaanLoytaja {
     private Hakemisto<Integer, Paikka> kohdePaikat;
     private double ajossaPisteet;
 
+    /**
+     * Alustaa olion-käyttöön.
+     * @param sitsit
+     */
     public ParhaanLoytaja(Sitsit sitsit) {
         this.sitsit = sitsit;
         this.optimoija = new Optimoija(sitsit);
@@ -31,6 +39,10 @@ public class ParhaanLoytaja {
         asetaLopetusHook();
     }
 
+    /**
+     * Käy annetun ajan verran läpi järjestyksiä, ja lopulta tulostaa parhaan löytämänsä.
+     * @param sekunttia
+     */
     public void optimoiIstumapaikat(int sekunttia) {
         this.aika = System.currentTimeMillis();
 

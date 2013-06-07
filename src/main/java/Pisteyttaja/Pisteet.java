@@ -4,6 +4,9 @@ import omatTietorakenteet.ArrayList;
 import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsit;
 
+/**
+ * Laskee ja palauttaa koko sitsit pistemäärän, jota sitten verrataan muihin järjestyksiin.
+ */
 public class Pisteet {
 
     private Sitsit sitsit;
@@ -18,6 +21,10 @@ public class Pisteet {
     private double sukupuoliPisteet;
     private double yhteysPisteet;
 
+    /**
+     * Luo ja alustaa olion.
+     * @param sitsit
+     */
     public Pisteet(Sitsit sitsit) {
         this.sitsit = sitsit;
         this.paikat = new ArrayList<PaikanPisteet>();
@@ -38,38 +45,47 @@ public class Pisteet {
         yhteysPisteet = 0.0;
 
         this.alustaSitsaajat();
-
-        for (PaikanPisteet sitsaajanPisteet : paikat) {
-            this.pisteet += sitsaajanPisteet.palautaPisteet();
-            if (sitsaajanPisteet.isAvec()) {
-                this.avec++;
-            }
-            if (sitsaajanPisteet.isPuoliso()) {
-                this.puoliso++;
-            }
-            this.onYhteyksia = true;
-
-            pariPisteet += sitsaajanPisteet.getPariPisteet();
-            sukupuoliPisteet += sitsaajanPisteet.getSukupuoliPisteet();
-            yhteysPisteet += sitsaajanPisteet.getYhteysPisteet();
-        }
+        
+        kayLapiKaikkiPaikat();
+        
         return pisteet;
     }
 
+        /**
+     * Palauttaa mahdolliset avec ja puolisopisteet.
+     *
+     * @return avec-pisteet
+     */
     public double getPariPisteet() {
         return pariPisteet;
     }
 
+    /**
+     * Palauttaa "tyttöpoika-järjestyksen" pisteet.
+     *
+     * @return
+     */
     public double getSukupuoliPisteet() {
         return sukupuoliPisteet;
     }
 
+    /**
+     * Palauttaa yhteyksien pisteet, eli kuinka hyvin järjestetty tykkäysten ja
+     * pienien riitojen maksimoimiseksi.
+     *
+     * @return yhteyspisteet.
+     */
     public double getYhteysPisteet() {
         return yhteysPisteet;
     }
 
+    /**
+     * Onko paikan sitsaajalla yhteyksiä muihin sitsaajiin.
+     *
+     * @return
+     */
     protected boolean onkoYhteyksia() {
-        return onYhteyksia;
+        return this.onYhteyksia;
     }
 
     private void alustaPaikat() {
@@ -81,6 +97,9 @@ public class Pisteet {
         }
     }
 
+    /**
+     * Asettaa sitsaajan tietämään, millä paikalla hän istuu.
+     */
     public void alustaSitsaajat() {
         for (Paikka paikka : this.paikkaLista) {
             paikka.getSitsaaja().setPaikka(paikka);
@@ -88,11 +107,41 @@ public class Pisteet {
 
     }
 
+    /**
+     * Palauttaa vierekkäin olevien avecien määrän.
+     * @return vierekkäin olevien avecien määrä.
+     */
     public int getAvecienMaara() {
         return avec;
     }
 
+    /**
+     * Palauttaa vierekkäin olevien puolisojen määrän.
+     * @return vierekkäin olevien puolisojen määrä.
+     */
     public int getPuolisojenMaara() {
         return puoliso;
+    }
+
+    private void kayLapiKaikkiPaikat() {
+        for (PaikanPisteet sitsaajanPisteet : paikat) {
+            this.pisteet += sitsaajanPisteet.palautaPisteet();
+            
+            if (sitsaajanPisteet.isAvec()) {
+                this.avec++;
+            }
+            if (sitsaajanPisteet.isPuoliso()) {
+                this.puoliso++;
+            }
+            this.onYhteyksia = true;
+            
+            asetaOsaPisteetOikein(sitsaajanPisteet);
+        }
+    }
+
+    private void asetaOsaPisteetOikein(PaikanPisteet sitsaajanPisteet) {
+        pariPisteet += sitsaajanPisteet.getPariPisteet();
+        sukupuoliPisteet += sitsaajanPisteet.getSukupuoliPisteet();
+        yhteysPisteet += sitsaajanPisteet.getYhteysPisteet();
     }
 }

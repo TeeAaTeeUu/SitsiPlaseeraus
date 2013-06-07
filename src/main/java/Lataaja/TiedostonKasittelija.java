@@ -6,10 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import omatTietorakenteet.ArrayList;
 import omatTietorakenteet.Hakemisto;
-import java.util.Map;
 import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Sitsaaja;
 
+/**
+ * Lukee tiedostosta asetukset, joiden avulla asetusten mukainen sitsi-olio on mahdollista luoda.
+ */
 public class TiedostonKasittelija {
 
     private final String file;
@@ -27,15 +29,19 @@ public class TiedostonKasittelija {
     private int arvo;
     private int index;
 
-    public TiedostonKasittelija(String file) {
-        this.file = file;
+    /**
+     * Alustaa ja asettaa tiedoston, josta tiedot otetaan.
+     * @param tiedosto
+     */
+    public TiedostonKasittelija(String tiedosto) {
+        this.file = tiedosto;
         this.alustaLuokat();
     }
 
-    public Hakemisto<Sitsaaja, Hakemisto> getYhteydet() {
-        return yhteydet;
-    }
-
+    /**
+     * Palauttaa asetustiedostosta löytyneet sitsaajat.
+     * @return Sitsaajat
+     */
     public ArrayList<Sitsaaja> getSitsaajat() {
         sitsaajatLista.clear();
         for (Vektori<String, Sitsaaja> sitsaaja : sitsaajat) {
@@ -46,15 +52,25 @@ public class TiedostonKasittelija {
         return sitsaajatLista;
     }
 
+    /**
+     * Palauttaa pöytien määrän.
+     * @return Pöytien määrä.
+     */
     public int getPoytienMaara() {
         return poytienMaara;
     }
 
+    /**
+     * Palauttaa pöytien koot taulukossa.
+     * @return Pöytien koot.
+     */
     public ArrayList<Integer> getPoytienKoot() {
         return poytienKoot;
     }
 
     /**
+     * Lukee tiedoston ja tallentaa muistiin siitä löytyvät tiedot.
+     * 
      * http://www.mkyong.com/java/how-to-read-and-parse-csv-file-in-java/
      */
     public void run() {
@@ -73,72 +89,11 @@ public class TiedostonKasittelija {
             System.exit(0);
         }
         try {
-
-            //poytien määrä
-            System.out.println("pöytien määrä");
-            while ((line = br.readLine()) != null && line.equals("--sitsaajat--") == false) {
-
-                tiedot = line.split(cvsSplitBy);
-                this.poytienMaara = Integer.parseInt(tiedot[0]);
-
-                for (int i = 0; i < getPoytienMaara(); i++) {
-                    this.poytienKoot.add((int) Integer.parseInt(tiedot[i + 1]));
-                }
-            }
-
-            //sitsaajat
-            System.out.println("sitsaajat");
-            while ((line = br.readLine()) != null && line.equals("--avecit--") == false) {
-
-                tiedot = line.split(cvsSplitBy);
-                sitsaaja = lisaaSitsaaja(tiedot[0], tiedot[1]);
-
-                sitsaajat.put(sitsaaja.getNimi(), sitsaaja);
-            }
-
-            //avecit
-            System.out.println("avecit");
-            while ((line = br.readLine()) != null && line.equals("--puolisot--") == false) {
-
-                tiedot = line.split(cvsSplitBy);
-                sitsaaja = sitsaaja(tiedot[0]);
-                kohdeSitsaaja = sitsaaja(tiedot[1]);
-
-                sitsaaja.setAvec(kohdeSitsaaja);
-            }
-
-            //puolisot
-            System.out.println("puolisot");
-            while ((line = br.readLine()) != null && line.equals("--yhteydet--") == false) {
-
-                tiedot = line.split(cvsSplitBy);
-                sitsaaja = sitsaaja(tiedot[0]);
-                kohdeSitsaaja = sitsaaja(tiedot[1]);
-
-                sitsaaja.setPuoliso(kohdeSitsaaja);
-            }
-
-            //yhteydet
-            System.out.println("yhteydet");
-            for (String string : tiedot) {
-                
-            }
-            while ((line = br.readLine()) != null) {
-
-                tiedot = line.split(cvsSplitBy);
-
-                sitsaaja = sitsaaja(tiedot[0]);
-                kohdeSitsaaja = sitsaaja(tiedot[1]);
-                arvo = Integer.parseInt(tiedot[2]);
-
-                if (sitsaajat.containsValue(sitsaaja)) {
-                    sitsaajat.get(tiedot[0]).setYhteys(kohdeSitsaaja, arvo);
-                    if(sitsaajat.get(tiedot[0]).yhteyksienMaara() == 0)
-                        System.out.println("yhteyden muodostus epäonnostui");
-                } else {
-                    System.out.println("virhe");
-                }
-            }
+            poytienMaara(br, cvsSplitBy);
+            sitsaajat(br, cvsSplitBy);
+            avecit(br, cvsSplitBy);
+            puolisot(br, cvsSplitBy);
+            yhteydet(br, cvsSplitBy);
 
         } catch (IOException ex) {
             System.out.println("hässäkkää");
@@ -182,5 +137,89 @@ public class TiedostonKasittelija {
         palautettavaMap = new Hakemisto<Sitsaaja, Hakemisto>();
         sitsaajatLista = new ArrayList<Sitsaaja>();
         poytienKoot = new ArrayList<Integer>();
+    }
+
+    private void poytienMaara(BufferedReader br, String cvsSplitBy) throws NumberFormatException, IOException {
+        String line;
+        //poytien määrä
+        System.out.println("pöytien määrä");
+        while ((line = br.readLine()) != null && line.equals("--sitsaajat--") == false) {
+
+            tiedot = line.split(cvsSplitBy);
+            this.poytienMaara = Integer.parseInt(tiedot[0]);
+
+            for (int i = 0; i < getPoytienMaara(); i++) {
+                this.poytienKoot.add((int) Integer.parseInt(tiedot[i + 1]));
+            }
+        }
+    }
+
+    private void sitsaajat(BufferedReader br, String cvsSplitBy) throws IOException {
+        String line;
+        //sitsaajat
+        System.out.println("sitsaajat");
+        while ((line = br.readLine()) != null && line.equals("--avecit--") == false) {
+
+            tiedot = line.split(cvsSplitBy);
+            sitsaaja = lisaaSitsaaja(tiedot[0], tiedot[1]);
+
+            sitsaajat.put(sitsaaja.getNimi(), sitsaaja);
+        }
+    }
+
+    private void avecit(BufferedReader br, String cvsSplitBy) throws IOException {
+        String line;
+        //avecit
+        System.out.println("avecit");
+        while ((line = br.readLine()) != null && line.equals("--puolisot--") == false) {
+
+            tiedot = line.split(cvsSplitBy);
+            sitsaaja = sitsaaja(tiedot[0]);
+            kohdeSitsaaja = sitsaaja(tiedot[1]);
+
+            sitsaaja.setAvec(kohdeSitsaaja);
+        }
+    }
+
+    private void puolisot(BufferedReader br, String cvsSplitBy) throws IOException {
+        String line;
+        //puolisot
+        System.out.println("puolisot");
+        while ((line = br.readLine()) != null && line.equals("--yhteydet--") == false) {
+
+            tiedot = line.split(cvsSplitBy);
+            sitsaaja = sitsaaja(tiedot[0]);
+            kohdeSitsaaja = sitsaaja(tiedot[1]);
+
+            sitsaaja.setPuoliso(kohdeSitsaaja);
+        }
+    }
+
+    private void yhteydet(BufferedReader br, String cvsSplitBy) throws NumberFormatException, IOException {
+        String line;
+        //yhteydet
+        System.out.println("yhteydet");
+        for (String string : tiedot) {
+            
+        }
+        while ((line = br.readLine()) != null) {
+            tiedot = line.split(cvsSplitBy);
+
+            sitsaaja = sitsaaja(tiedot[0]);
+            kohdeSitsaaja = sitsaaja(tiedot[1]);
+            arvo = Integer.parseInt(tiedot[2]);
+            
+            pyritaanLisaamaanYhteys();
+        }
+    }
+
+    private void pyritaanLisaamaanYhteys() {
+        if (sitsaajat.containsValue(sitsaaja)) {
+            sitsaajat.get(tiedot[0]).setYhteys(kohdeSitsaaja, arvo);
+            if(sitsaajat.get(tiedot[0]).yhteyksienMaara() == 0)
+                System.out.println("yhteyden muodostus epäonnostui");
+        } else {
+            System.out.println("virhe");
+        }
     }
 }

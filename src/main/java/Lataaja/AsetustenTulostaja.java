@@ -4,11 +4,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Map;
 import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 
+/**
+ * Kerää sitsi-oliosta tiedot ja tallentaa sen mukaisen asetustiedoston.
+ */
 public class AsetustenTulostaja {
 
     private Sitsit sitsit;
@@ -19,14 +21,27 @@ public class AsetustenTulostaja {
     private FileWriter fw;
     private int[] poytienKoot;
 
+    /**
+     * Alustaa olion.
+     * @param sitsit
+     */
     public AsetustenTulostaja(Sitsit sitsit) {
         this.sitsit = sitsit;
     }
 
+    /**
+     * Kuinka monta pöytää halutaan asetustiedoston määrittävän.
+     * @param poytienMaara
+     */
     public void asetaPoytienMaara(int poytienMaara) {
         this.poytienMaara = poytienMaara;
     }
 
+    /**
+     * Asettaa pöytien koot annetussa taulukossa.
+     * @param poytienKoot
+     * @return true, jos pöytien määrä on OK.
+     */
     public boolean asetaPoytienKoot(int[] poytienKoot) {
         if (poytienKoot.length == poytienMaara) {
             this.poytienKoot = poytienKoot;
@@ -37,6 +52,10 @@ public class AsetustenTulostaja {
         return false;
     }
 
+    /**
+     * Tallentaa annettuun tiedostoon asetukset. Jos tiedosto puuttuu, se luodaan.
+     * @param tiedosto
+     */
     public void vieAsetuksetTiedostoon(String tiedosto) {
         this.tiedosto = tiedosto;
 
@@ -66,7 +85,6 @@ public class AsetustenTulostaja {
 
         } catch (IOException e) {
             System.out.println("jotain hässäkkää tapahtui");
-            e.printStackTrace();
         }
     }
 

@@ -7,6 +7,9 @@ import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.random.Random;
 
+/**
+ * Vielä kokeilu vaiheessa, mutta pyrkii auttamaan järjestyksen luomista niin, että luo valmiiksi hyviä "tyttöpoika-järjestyksiä".
+ */
 public class SukupuoliJarjestaja {
 
     private Sitsit sitsit;

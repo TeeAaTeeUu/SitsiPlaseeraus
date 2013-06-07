@@ -10,6 +10,9 @@ import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.random.Random;
 import sitsiplaseeraus.random.RandomGenerator;
 
+/**
+ * Pyrkii löytämään mahdollisimman nopeasti ja mahdollisimman hyvän järjestyksen.
+ */
 public class Optimoija {
 
     private Jarjestaja jarjestelija;
@@ -34,6 +37,10 @@ public class Optimoija {
     private ArrayList<Paikka> naisenPaikat;
     private ArrayList<Paikka> miehenPaikat;
 
+    /**
+     * Alustaa olion käyttöön.
+     * @param sitsit
+     */
     public Optimoija(Sitsit sitsit) {
         this.sitsit = sitsit;
         this.sitsit.lisaaPaikoilleTiedotAvecinJaPuolisonPaikoista();
@@ -49,6 +56,11 @@ public class Optimoija {
         this.sukupuoliJarjestaja = new SukupuoliJarjestaja(sitsit);
     }
 
+    /**
+     * Käy läpi tietyllä toivottavasti fiksulla tavalla erinäisiä järjestyksiä läpi ja jatkaa siihen mennessä parhaasta löydetystä aina eteenpäin.
+     * @param sekunttia
+     * @return tämän haun parhaan järjestyksen.
+     */
     public Hakemisto<Paikka, Sitsaaja> optimoiIstumapaikat(int sekunttia) {
         alustaJuttuja();
 
@@ -79,12 +91,12 @@ public class Optimoija {
         return this.vanhatPaikat;
     }
 
-    public double getVanhassaPisteita() {
+    /**
+     * Palauttaa tähän mennessä parhaan pisteet.
+     * @return pisteitä tähän mennessä parhaassa.
+     */
+    protected double getVanhassaPisteita() {
         return VanhassaPisteita;
-    }
-
-    public Pisteet getPisteet() {
-        return pisteet;
     }
 
     private boolean kokeileVaihtoa() {
@@ -252,5 +264,9 @@ public class Optimoija {
             System.out.println(i);
             miehenPaikat.get(i).setSitsaaja(miehet.get(i));
         }
+    }
+
+    public Pisteet getPisteet() {
+        return pisteet;
     }
 }

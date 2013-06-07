@@ -6,6 +6,9 @@ import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.random.Random;
 
+/**
+ * Vaihtaa paikkojen sitsaajien päittäin.
+ */
 public class Jarjestaja {
 
     private Sitsit sitsit;
@@ -18,10 +21,18 @@ public class Jarjestaja {
     private Sitsaaja tokaSitsaaja;
     private Sitsaaja tokaKohdeSitsaaja;
 
+    /**
+     * Alustaa olion käyttöön.
+     * @param sitsit
+     */
     public Jarjestaja(Sitsit sitsit) {
         this.sitsit = sitsit;
     }
 
+    /**
+     * Vaihtaa kahden satunnaisen paikan sitsaajien paikkoja keskenään.
+     * @return onnistuiko
+     */
     protected boolean vaihdaRandom() {
         ekaKohdePaikka = null;
         ekaPaikka = sitsit.getPaikka(Random.luo(sitsit.sitsaajienMaara() - 1));
@@ -45,7 +56,7 @@ public class Jarjestaja {
         }
     }
 
-    protected boolean vaihdaPaikat() {
+    private boolean vaihdaPaikat() {
         this.ekaSitsaaja = ekaPaikka.getSitsaaja();
         this.ekaKohdeSitsaaja = ekaKohdePaikka.getSitsaaja();
 
@@ -55,6 +66,12 @@ public class Jarjestaja {
         return true;
     }
 
+    /**
+     * Vaihtaa kahden ennaltamäärätyn paikkoja keskenään.
+     * @param ekaPaikka
+     * @param ekaKohdePaikka
+     * @return true, jos onnistui.
+     */
     protected boolean vaihdaPaikat(Paikka ekaPaikka, Paikka ekaKohdePaikka) {
         this.ekaPaikka = ekaPaikka;
         this.ekaKohdePaikka = ekaKohdePaikka;

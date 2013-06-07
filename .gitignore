@@ -1,2 +1,4 @@
 target/*
 *.docx
+
+.DS_Store
