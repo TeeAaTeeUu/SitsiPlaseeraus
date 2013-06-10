@@ -10,7 +10,8 @@ import omatTietorakenteet.Vektori;
 import sitsiplaseeraus.Sitsaaja;
 
 /**
- * Lukee tiedostosta asetukset, joiden avulla asetusten mukainen sitsi-olio on mahdollista luoda.
+ * Lukee tiedostosta asetukset, joiden avulla asetusten mukainen sitsi-olio on
+ * mahdollista luoda.
  */
 public class TiedostonKasittelija {
 
@@ -31,6 +32,7 @@ public class TiedostonKasittelija {
 
     /**
      * Alustaa ja asettaa tiedoston, josta tiedot otetaan.
+     *
      * @param tiedosto
      */
     public TiedostonKasittelija(String tiedosto) {
@@ -40,20 +42,23 @@ public class TiedostonKasittelija {
 
     /**
      * Palauttaa asetustiedostosta löytyneet sitsaajat.
+     *
      * @return Sitsaajat
      */
     public ArrayList<Sitsaaja> getSitsaajat() {
         sitsaajatLista.clear();
         for (Vektori<String, Sitsaaja> sitsaaja : sitsaajat) {
             sitsaajatLista.add(sitsaaja.getValue());
-            if(sitsaaja.getValue().yhteyksienMaara() == 0)
+            if (sitsaaja.getValue().yhteyksienMaara() == 0) {
                 System.out.println("yhteyksiä nolla");
+            }
         }
         return sitsaajatLista;
     }
 
     /**
      * Palauttaa pöytien määrän.
+     *
      * @return Pöytien määrä.
      */
     public int getPoytienMaara() {
@@ -62,6 +67,7 @@ public class TiedostonKasittelija {
 
     /**
      * Palauttaa pöytien koot taulukossa.
+     *
      * @return Pöytien koot.
      */
     public ArrayList<Integer> getPoytienKoot() {
@@ -70,7 +76,7 @@ public class TiedostonKasittelija {
 
     /**
      * Lukee tiedoston ja tallentaa muistiin siitä löytyvät tiedot.
-     * 
+     *
      * http://www.mkyong.com/java/how-to-read-and-parse-csv-file-in-java/
      */
     public void run() {
@@ -163,6 +169,8 @@ public class TiedostonKasittelija {
             tiedot = line.split(cvsSplitBy);
             sitsaaja = lisaaSitsaaja(tiedot[0], tiedot[1]);
 
+            System.out.println(sitsaaja.getNimi());
+
             sitsaajat.put(sitsaaja.getNimi(), sitsaaja);
         }
     }
@@ -178,6 +186,8 @@ public class TiedostonKasittelija {
             kohdeSitsaaja = sitsaaja(tiedot[1]);
 
             sitsaaja.setAvec(kohdeSitsaaja);
+
+            System.out.println(sitsaaja.getNimi() + " ja " + sitsaaja.getAvec().getNimi());
         }
     }
 
@@ -192,6 +202,8 @@ public class TiedostonKasittelija {
             kohdeSitsaaja = sitsaaja(tiedot[1]);
 
             sitsaaja.setPuoliso(kohdeSitsaaja);
+
+            System.out.println(sitsaaja.getNimi() + " ja " + sitsaaja.getPuoliso().getNimi());
         }
     }
 
@@ -200,7 +212,6 @@ public class TiedostonKasittelija {
         //yhteydet
         System.out.println("yhteydet");
         for (String string : tiedot) {
-            
         }
         while ((line = br.readLine()) != null) {
             tiedot = line.split(cvsSplitBy);
@@ -208,18 +219,15 @@ public class TiedostonKasittelija {
             sitsaaja = sitsaaja(tiedot[0]);
             kohdeSitsaaja = sitsaaja(tiedot[1]);
             arvo = Integer.parseInt(tiedot[2]);
-            
+
             pyritaanLisaamaanYhteys();
         }
     }
 
     private void pyritaanLisaamaanYhteys() {
-        if (sitsaajat.containsValue(sitsaaja)) {
-            sitsaajat.get(tiedot[0]).setYhteys(kohdeSitsaaja, arvo);
-            if(sitsaajat.get(tiedot[0]).yhteyksienMaara() == 0)
-                System.out.println("yhteyden muodostus epäonnostui");
-        } else {
-            System.out.println("virhe");
+        sitsaaja.setYhteys(kohdeSitsaaja, arvo);
+        if (sitsaaja.yhteyksienMaara() == 0) {
+            System.out.println("yhteyden muodostus epäonnostui");
         }
     }
 }

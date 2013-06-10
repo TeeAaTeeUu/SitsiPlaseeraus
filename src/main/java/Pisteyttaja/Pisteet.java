@@ -5,7 +5,8 @@ import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsit;
 
 /**
- * Laskee ja palauttaa koko sitsit pistemäärän, jota sitten verrataan muihin järjestyksiin.
+ * Laskee ja palauttaa koko sitsit pistemäärän, jota sitten verrataan muihin
+ * järjestyksiin.
  */
 public class Pisteet {
 
@@ -23,6 +24,7 @@ public class Pisteet {
 
     /**
      * Luo ja alustaa olion.
+     *
      * @param sitsit
      */
     public Pisteet(Sitsit sitsit) {
@@ -45,13 +47,28 @@ public class Pisteet {
         yhteysPisteet = 0.0;
 
         this.alustaSitsaajat();
-        
-        kayLapiKaikkiPaikat();
-        
+
+        kayLapiKaikkiPaikat(false);
+
         return pisteet;
     }
 
-        /**
+    public double palautaSukupuoliJaPariPisteet() {
+        this.pisteet = 0.0;
+        this.avec = 0;
+        this.puoliso = 0;
+
+        pariPisteet = 0.0;
+        sukupuoliPisteet = 0.0;
+
+        this.alustaSitsaajat();
+
+        kayLapiKaikkiPaikat(true);
+
+        return pisteet;
+    }
+
+    /**
      * Palauttaa mahdolliset avec ja puolisopisteet.
      *
      * @return avec-pisteet
@@ -109,6 +126,7 @@ public class Pisteet {
 
     /**
      * Palauttaa vierekkäin olevien avecien määrän.
+     *
      * @return vierekkäin olevien avecien määrä.
      */
     public int getAvecienMaara() {
@@ -117,16 +135,22 @@ public class Pisteet {
 
     /**
      * Palauttaa vierekkäin olevien puolisojen määrän.
+     *
      * @return vierekkäin olevien puolisojen määrä.
      */
     public int getPuolisojenMaara() {
         return puoliso;
     }
 
-    private void kayLapiKaikkiPaikat() {
+    private void kayLapiKaikkiPaikat(boolean vainSukupuoliJaPariPisteet) {
         for (PaikanPisteet sitsaajanPisteet : paikat) {
-            this.pisteet += sitsaajanPisteet.palautaPisteet();
-            
+            if (vainSukupuoliJaPariPisteet == false) {
+                this.pisteet += sitsaajanPisteet.palautaPisteet();
+            }
+
+            this.sukupuoliPisteet += sitsaajanPisteet.tarkistaAvecJaPuoliso();
+            this.pariPisteet += sitsaajanPisteet.tarkistaYmparillaOlevienSukupuolet();
+
             if (sitsaajanPisteet.isAvec()) {
                 this.avec++;
             }
@@ -134,8 +158,10 @@ public class Pisteet {
                 this.puoliso++;
             }
             this.onYhteyksia = true;
-            
-            asetaOsaPisteetOikein(sitsaajanPisteet);
+
+            if (vainSukupuoliJaPariPisteet == false) {
+                asetaOsaPisteetOikein(sitsaajanPisteet);
+            }
         }
     }
 

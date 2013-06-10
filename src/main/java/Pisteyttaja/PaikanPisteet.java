@@ -138,7 +138,7 @@ public class PaikanPisteet {
         }
     }
 
-    private double tarkistaAvecJaPuoliso() {
+    public double tarkistaAvecJaPuoliso() {
         double pisteet = this.tarkistaAvec(this.paikka);
         if (pisteet == 0.0) {
             pisteet = this.tarkistaPuoliso(this.paikka);
@@ -156,6 +156,7 @@ public class PaikanPisteet {
 
     /**
      * Tarkistaa onko paikan sitsaajalla avec tai puoliso.
+     *
      * @param paikka
      * @return true, jos avec tai puoliso.
      */
@@ -184,11 +185,15 @@ public class PaikanPisteet {
                         return 10000.2;
                     }
                 } else if (mikaPari == 0) {
-                    josSitsaajaOnNainenJaAvecMies(paikka);
-                    josSitsaajaOnMiesJaAvecNainen(paikka);
+                    if (josSitsaajaOnNainenJaAvecMies(paikka)) {
+                        return 10000.3;
+                    } else if (josSitsaajaOnMiesJaAvecNainen(paikka)) {
+                        return 10000.3;
+                    }
                 }
             }
         }
+
         return 0.0;
     }
 
@@ -210,6 +215,7 @@ public class PaikanPisteet {
 
     /**
      * Onko paikan sitsaajalla avec.
+     *
      * @return true, jos avec
      */
     public boolean isAvec() {
@@ -222,6 +228,7 @@ public class PaikanPisteet {
 
     /**
      * Palauttaa tiedon siitä, onko paikan sitsaajalla puolisoa.
+     *
      * @return true, jos puoliso.
      */
     public boolean isPuoliso() {
@@ -245,18 +252,17 @@ public class PaikanPisteet {
         return -2;
     }
 
-    private double tarkistaYmparillaOlevienSukupuolet() {
+    public double tarkistaYmparillaOlevienSukupuolet() {
 
-        int tarkeys = 500;
         int pisteita = 0;
         boolean mies;
-        
+
         mies = onkoMiesVaiNainen();
-        
+
         pisteita += miehenAvecinPaikallaToistaSukupuolta(mies);
-        pisteita += naisenAvecinPaikallaToistaSukupuolta(mies);        
+        pisteita += naisenAvecinPaikallaToistaSukupuolta(mies);
         pisteita += puolisonPaikallaToistaSukupuolta(mies);
-        
+
         return pisteita;
     }
 
@@ -266,7 +272,7 @@ public class PaikanPisteet {
 
             this.kohdeSitsaaja = (Sitsaaja) yhteys.getKey();
             this.kohdePaikka = this.kohdeSitsaaja.getPaikka();
-            
+
             yhteysPisteet += josPoytaOnSama(yhteys);
         }
         return yhteysPisteet;
@@ -280,7 +286,7 @@ public class PaikanPisteet {
         sukupuoliPisteet = 0.0;
         yhteysPisteet = 0.0;
     }
-    
+
     private static boolean josSitsaajaOnMiesJaAvecNainen(Paikka paikka) {
         if (paikka.getMiehenAvecinPaikka() != null) {
             if (paikka.getSitsaaja().getAvec().equals(paikka.getMiehenAvecinPaikka().getSitsaaja())) {

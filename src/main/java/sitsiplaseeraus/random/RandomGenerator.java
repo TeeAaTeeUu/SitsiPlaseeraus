@@ -7,12 +7,15 @@ import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
 
 /**
- * Hoitaa kolmea asiaa: satunnaisten nimien luomista, niiden käyttämistä satunnaisen sitsin luomiseen sekä sitsaajien ja yhteyksien tulostamiseen.
+ * Hoitaa kolmea asiaa: satunnaisten nimien luomista, niiden käyttämistä
+ * satunnaisen sitsin luomiseen sekä sitsaajien ja yhteyksien tulostamiseen.
  */
 public class RandomGenerator {
 
     /**
-     * Tulostaa sitsaajien väliset yhteydet, eli kuka pitää kenestäkin ja miten paljon.
+     * Tulostaa sitsaajien väliset yhteydet, eli kuka pitää kenestäkin ja miten
+     * paljon.
+     *
      * @param sitsit Josta tiedot tutkitaan
      */
     public static void tulostaYhteydet(Sitsit sitsit) {
@@ -51,6 +54,7 @@ public class RandomGenerator {
 
     /**
      * Tulostaa sitsaajat heidän oikeassa järjestyksessään pöydittäin
+     *
      * @param sitsit Josta tiedot tutkitaan
      */
     public static void tulostaSitsaajat(Sitsit sitsit) {
@@ -61,10 +65,10 @@ public class RandomGenerator {
 
             for (Sitsaaja sitsaaja : sitsit.palautaPoydanSitsaajat(i)) {
                 if (even == true) {
-                    System.out.print(sitsaaja.getNimi() + "\t:\t");
+                    System.out.print(sitsaaja.getNimi() + sukupuoli(sitsaaja) + "\t:\t");
                     even = false;
                 } else {
-                    System.out.println(sitsaaja.getNimi());
+                    System.out.println(sitsaaja.getNimi() + sukupuoli(sitsaaja));
                     even = true;
                 }
             }
@@ -75,6 +79,14 @@ public class RandomGenerator {
             }
         }
         System.out.println("\n" + "--------" + "\n");
+    }
+
+    private static String sukupuoli(Sitsaaja sitsaaja) {
+        if (sitsaaja.isMies()) {
+            return " (mies) ";
+        } else {
+            return " (nainen) ";
+        }
     }
     private RandomNimi nimet;
 
@@ -93,6 +105,7 @@ public class RandomGenerator {
 
     /**
      * Luo koko nimen, joko miehen tai naisen
+     *
      * @param mies Onko mies vai ei
      * @return Naisen tai miehen koko nimen
      */
@@ -105,7 +118,9 @@ public class RandomGenerator {
     }
 
     /**
-     * Täyttää sitsit satunnaisilla tiedoilla, eli lisää halutun määrän sitsaajia ja heidän välisiä yhteyksiä sekä avecit ja puolisot
+     * Täyttää sitsit satunnaisilla tiedoilla, eli lisää halutun määrän
+     * sitsaajia ja heidän välisiä yhteyksiä sekä avecit ja puolisot
+     *
      * @param montakoSitsaajaa
      * @param montakoYhteytta
      * @param sitsit
@@ -178,7 +193,7 @@ public class RandomGenerator {
 
             sitsaaja.setAvec(kohdeSitsaaja);
             kohdeSitsaaja.setAvec(sitsaaja);
-            
+
             i++;
         } while (i < aveceja);
     }

@@ -18,6 +18,7 @@ public class Optimoija {
     private Jarjestaja jarjestelija;
     private Sitsit sitsit;
     private Pisteet pisteet;
+    private ArrayList<Paikka> paikat;
     private long aika;
     private double VanhassaPisteita;
     private Hakemisto<Paikka, Sitsaaja> vanhatPaikat;
@@ -29,13 +30,8 @@ public class Optimoija {
     private int kuinkaMontaVaihtoa;
     private int vaihtojenMaksimiMaara;
     private int epaOnnistumisia;
-    private final SukupuoliJarjestaja sukupuoliJarjestaja;
-    private ArrayList<Sitsaaja> sitsaajat;
-    private ArrayList<Paikka> paikat;
-    private ArrayList<Sitsaaja> naiset;
-    private ArrayList<Sitsaaja> miehet;
-    private ArrayList<Paikka> naisenPaikat;
-    private ArrayList<Paikka> miehenPaikat;
+    private SukupuoliJarjestaja sukupuoliJarjestaja;
+    private AlkuSijoittaja alkuSijoittaja;
 
     /**
      * Alustaa olion käyttöön.
@@ -54,6 +50,9 @@ public class Optimoija {
         this.dtime = new DecimalFormat("#.##");
 
         this.sukupuoliJarjestaja = new SukupuoliJarjestaja(sitsit);
+        
+        this.alkuSijoittaja = new AlkuSijoittaja(sitsit);
+        this.paikat = new ArrayList<Paikka>();
     }
 
     /**
@@ -208,63 +207,15 @@ public class Optimoija {
     }
 
     private void sijoitaAlkupaikat() {
-        sukupuoliJarjestaja.jarjestaPaikatSukupuolittain();
-        alustaJaTyhjenna();
+//        sukupuoliJarjestaja.jarjestaPaikatSukupuolittain();
+//        
+//        this.alkuSijoittaja.asetaAlkupaikat();
         
-        asetaSitsaajatPaikoilleen();
-    }
-
-    private void lisaaSukupuoliPaikat() {
-        this.naisenPaikat = new ArrayList<Paikka>();
-        this.miehenPaikat = new ArrayList<Paikka>();
-        for (Paikka paikka : paikat) {
-            if (paikka.isMiehenPaikka()) {
-                this.miehenPaikat.add(paikka);
-            } else {
-                this.naisenPaikat.add(paikka);
-            }
+        for (int i = 0; i < sitsaajienMaara * 10; i++) {
+            jarjestelija.vaihdaRandom();
         }
     }
 
-    private void lisaaSukupuolet() {
-        this.naiset = new ArrayList<Sitsaaja>();
-        this.miehet = new ArrayList<Sitsaaja>();
-        for (Sitsaaja sitsaaja : sitsaajat) {
-            if (sitsaaja.isMies()) {
-                this.miehet.add(sitsaaja);
-            } else {
-                this.naiset.add(sitsaaja);
-            }
-        }
-    }
-
-    private void alustaJaTyhjenna() {
-        this.sitsaajat = this.sitsit.getSitsaajat();
-        this.paikat = this.sitsit.getPaikat();
-        
-        for (Paikka paikka : paikat) {
-            paikka.setSitsaaja(null);
-        }
-
-        for (Sitsaaja sitsaaja : sitsaajat) {
-            sitsaaja.setPaikka(null);
-        }
-    }
-
-    private void asetaSitsaajatPaikoilleen() {
-        lisaaSukupuolet();
-        lisaaSukupuoliPaikat();
-        
-        for (int i = 0; i < naiset.size(); i++) {
-            System.out.println(i);
-            naisenPaikat.get(i).setSitsaaja(naiset.get(i));
-        }
-        
-        for (int i = 0; i < miehet.size(); i++) {
-            System.out.println(i);
-            miehenPaikat.get(i).setSitsaaja(miehet.get(i));
-        }
-    }
 
     public Pisteet getPisteet() {
         return pisteet;

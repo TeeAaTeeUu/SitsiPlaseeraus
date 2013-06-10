@@ -1,7 +1,9 @@
 package omatTietorakenteet;
 
 /**
- * Toimii kuin Javan oma ArrayList niiltä osin, kuin niitä metodeja olen tarvinnut.
+ * Toimii kuin Javan oma ArrayList niiltä osin, kuin niitä metodeja olen
+ * tarvinnut.
+ *
  * @param <E>
  */
 public class ArrayList<E> implements Iterable<E> {
@@ -26,18 +28,18 @@ public class ArrayList<E> implements Iterable<E> {
     }
 
     public boolean add(E e) {
-        if(koko == mahtuu - 2) {
+        if (koko == mahtuu - 2) {
             kasvata();
         }
         varasto[koko] = (E) e;
         koko++;
         return true;
     }
-    
+
     private void kasvata() {
         mahtuu *= 2;
         Object[] varasto = new Object[mahtuu];
-        
+
         for (int i = 0; i < koko; i++) {
             varasto[i] = get(i);
         }
@@ -70,14 +72,26 @@ public class ArrayList<E> implements Iterable<E> {
         return false;
     }
 
-    /**
-     * Vielä toteuttamatta
-     * @param monesko
-     */
-    public void remove(int monesko) {
+    public E remove(int monesko) {
         if (monesko > koko || monesko < 0) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            return null;
+        } else {
+            E vanha = (E) varasto[monesko];
+            for (int i = monesko; i < koko -1; i++) {
+                    varasto[i] = varasto[i + 1];
+            }
+            koko--;
+            return vanha;
         }
+    }
+
+    public E remove(E e) {
+        for (int i = 0; i < koko; i++) {
+            if(varasto[i].equals(e)) {
+                return remove(i);
+            }
+        }
+        return null;
     }
 
     public java.util.Iterator<E> iterator() {
