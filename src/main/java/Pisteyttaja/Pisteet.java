@@ -38,13 +38,7 @@ public class Pisteet {
     }
 
     public double palautaPisteet() {
-        this.pisteet = 0.0;
-        this.avec = 0;
-        this.puoliso = 0;
-
-        pariPisteet = 0.0;
-        sukupuoliPisteet = 0.0;
-        yhteysPisteet = 0.0;
+        nollaaPisteet();
 
         this.alustaSitsaajat();
 
@@ -54,12 +48,7 @@ public class Pisteet {
     }
 
     public double palautaSukupuoliJaPariPisteet() {
-        this.pisteet = 0.0;
-        this.avec = 0;
-        this.puoliso = 0;
-
-        pariPisteet = 0.0;
-        sukupuoliPisteet = 0.0;
+        nollaaPisteet();
 
         this.alustaSitsaajat();
 
@@ -146,10 +135,10 @@ public class Pisteet {
         for (PaikanPisteet sitsaajanPisteet : paikat) {
             if (vainSukupuoliJaPariPisteet == false) {
                 this.pisteet += sitsaajanPisteet.palautaPisteet();
+            } else {
+                this.pisteet += sitsaajanPisteet.tarkistaAvecJaPuoliso();
+                this.pisteet += sitsaajanPisteet.tarkistaYmparillaOlevienSukupuolet();
             }
-
-            this.sukupuoliPisteet += sitsaajanPisteet.tarkistaAvecJaPuoliso();
-            this.pariPisteet += sitsaajanPisteet.tarkistaYmparillaOlevienSukupuolet();
 
             if (sitsaajanPisteet.isAvec()) {
                 this.avec++;
@@ -159,9 +148,7 @@ public class Pisteet {
             }
             this.onYhteyksia = true;
 
-            if (vainSukupuoliJaPariPisteet == false) {
-                asetaOsaPisteetOikein(sitsaajanPisteet);
-            }
+            asetaOsaPisteetOikein(sitsaajanPisteet);
         }
     }
 
@@ -169,5 +156,15 @@ public class Pisteet {
         pariPisteet += sitsaajanPisteet.getPariPisteet();
         sukupuoliPisteet += sitsaajanPisteet.getSukupuoliPisteet();
         yhteysPisteet += sitsaajanPisteet.getYhteysPisteet();
+    }
+
+    private void nollaaPisteet() {
+        this.pisteet = 0.0;
+        this.avec = 0;
+        this.puoliso = 0;
+
+        pariPisteet = 0.0;
+        sukupuoliPisteet = 0.0;
+        yhteysPisteet = 0.0;
     }
 }

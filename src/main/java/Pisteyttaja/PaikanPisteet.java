@@ -139,18 +139,18 @@ public class PaikanPisteet {
     }
 
     public double tarkistaAvecJaPuoliso() {
-        double pisteet = this.tarkistaAvec(this.paikka);
-        if (pisteet == 0.0) {
-            pisteet = this.tarkistaPuoliso(this.paikka);
-            if (pisteet > 0.0) {
+        sukupuoliPisteet = this.tarkistaAvec(this.paikka);
+        if (sukupuoliPisteet == 0.0) {
+            sukupuoliPisteet = this.tarkistaPuoliso(this.paikka);
+            if (sukupuoliPisteet > 0.0) {
                 setPuoliso();
             }
-            return pisteet;
+            return sukupuoliPisteet;
         } else {
-            if (pisteet > 0.0) {
+            if (sukupuoliPisteet > 0.0) {
                 setAvec();
             }
-            return pisteet;
+            return sukupuoliPisteet;
         }
     }
 
@@ -262,6 +262,8 @@ public class PaikanPisteet {
         pisteita += miehenAvecinPaikallaToistaSukupuolta(mies);
         pisteita += naisenAvecinPaikallaToistaSukupuolta(mies);
         pisteita += puolisonPaikallaToistaSukupuolta(mies);
+        
+        this.sukupuoliPisteet = pisteita;
 
         return pisteita;
     }

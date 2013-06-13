@@ -44,6 +44,14 @@ public class ParhaanLoytaja {
      * @param sekunttia
      */
     public void optimoiIstumapaikat(int sekunttia) {
+        optimoiIstumapaikat(sekunttia, false);
+    }
+    
+    public void optimoiSukupuoliPaikat(int sekunttia) {
+        optimoiIstumapaikat(sekunttia, true);
+    }
+    
+    private void optimoiIstumapaikat(int sekunttia, boolean pelkatParitJaSukupuolet) {
         this.aika = System.currentTimeMillis();
 
         RandomGenerator.tulostaSitsaajat(sitsit);
@@ -51,7 +59,7 @@ public class ParhaanLoytaja {
         tallennaMuistiin(this.sitsit.palautaPaikkaSitsaajaParit(), this.ekatPoydat);
 
         while (aika + 1000 * sekunttia > System.currentTimeMillis()) {
-            this.ajonParhaatPaikat = optimoija.optimoiIstumapaikat(sekunttia);
+            this.ajonParhaatPaikat = optimoija.optimoiIstumapaikat(sekunttia, pelkatParitJaSukupuolet);
             this.ajossaPisteet = this.optimoija.getVanhassaPisteita();
             if (this.parhaanPisteet < this.ajossaPisteet) {
                 tallennaMuistiin(this.ajonParhaatPaikat, this.parhaatPoydat);

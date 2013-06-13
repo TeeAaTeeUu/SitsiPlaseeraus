@@ -11,7 +11,8 @@ import sitsiplaseeraus.random.Random;
 import sitsiplaseeraus.random.RandomGenerator;
 
 /**
- * Pyrkii löytämään mahdollisimman nopeasti ja mahdollisimman hyvän järjestyksen.
+ * Pyrkii löytämään mahdollisimman nopeasti ja mahdollisimman hyvän
+ * järjestyksen.
  */
 public class Optimoija {
 
@@ -32,9 +33,11 @@ public class Optimoija {
     private int epaOnnistumisia;
     private SukupuoliJarjestaja sukupuoliJarjestaja;
     private AlkuSijoittaja alkuSijoittaja;
+    private boolean vainParitJaSukupuolet;
 
     /**
      * Alustaa olion käyttöön.
+     *
      * @param sitsit
      */
     public Optimoija(Sitsit sitsit) {
@@ -50,18 +53,22 @@ public class Optimoija {
         this.dtime = new DecimalFormat("#.##");
 
         this.sukupuoliJarjestaja = new SukupuoliJarjestaja(sitsit);
-        
+
         this.alkuSijoittaja = new AlkuSijoittaja(sitsit);
         this.paikat = new ArrayList<Paikka>();
     }
 
     /**
-     * Käy läpi tietyllä toivottavasti fiksulla tavalla erinäisiä järjestyksiä läpi ja jatkaa siihen mennessä parhaasta löydetystä aina eteenpäin.
+     * Käy läpi tietyllä toivottavasti fiksulla tavalla erinäisiä järjestyksiä
+     * läpi ja jatkaa siihen mennessä parhaasta löydetystä aina eteenpäin.
+     *
      * @param sekunttia
      * @return tämän haun parhaan järjestyksen.
      */
-    public Hakemisto<Paikka, Sitsaaja> optimoiIstumapaikat(int sekunttia) {
+    public Hakemisto<Paikka, Sitsaaja> optimoiIstumapaikat(int sekunttia, boolean vainParitJaSukupuolet) {
         alustaJuttuja();
+
+        this.vainParitJaSukupuolet = vainParitJaSukupuolet;
 
         this.aika = System.currentTimeMillis();
 
@@ -92,6 +99,7 @@ public class Optimoija {
 
     /**
      * Palauttaa tähän mennessä parhaan pisteet.
+     *
      * @return pisteitä tähän mennessä parhaassa.
      */
     protected double getVanhassaPisteita() {
@@ -114,7 +122,11 @@ public class Optimoija {
     private void tulostaLoppuTietoja(long kuinkaMontaKokeiltiin) {
         RandomGenerator.tulostaSitsaajat(this.sitsit);
 
-        System.out.println(this.pisteet.palautaPisteet());
+        if (vainParitJaSukupuolet) {
+            System.out.println(this.pisteet.palautaSukupuoliJaPariPisteet());
+        } else {
+            System.out.println(this.pisteet.palautaPisteet());
+        }
         System.out.println("\n" + "kuinka monta kertaa kokeiltiin paikkojen vaihtoa: " + kuinkaMontaKokeiltiin);
 
         time = 1.0 * (System.currentTimeMillis() - this.aika) / 1000;
@@ -123,13 +135,23 @@ public class Optimoija {
     }
 
     private void alustaVaihtoaVarten() {
-        this.VanhassaPisteita = this.pisteet.palautaPisteet();
+        if (vainParitJaSukupuolet) {
+            this.VanhassaPisteita = this.pisteet.palautaSukupuoliJaPariPisteet();
+        } else {
+            this.VanhassaPisteita = this.pisteet.palautaPisteet();
+        }
+        
         this.vanhatPaikat = this.sitsit.palautaPaikkaSitsaajaParit();
 
     }
 
     private boolean tulostaOnnistumisviestiTaiPalautaVanha() {
-        Double pisteita = this.pisteet.palautaPisteet();
+        Double pisteita;
+        if (vainParitJaSukupuolet) {
+            pisteita = this.pisteet.palautaSukupuoliJaPariPisteet();
+        } else {
+            pisteita = this.pisteet.palautaPisteet();
+        }
 
         if (Double.isInfinite(pisteita)) {
             System.out.println("virhe");
@@ -210,12 +232,11 @@ public class Optimoija {
 //        sukupuoliJarjestaja.jarjestaPaikatSukupuolittain();
 //        
 //        this.alkuSijoittaja.asetaAlkupaikat();
-        
+
         for (int i = 0; i < sitsaajienMaara * 10; i++) {
             jarjestelija.vaihdaRandom();
         }
     }
-
 
     public Pisteet getPisteet() {
         return pisteet;

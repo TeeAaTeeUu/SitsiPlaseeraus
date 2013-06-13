@@ -69,7 +69,7 @@ public class Main {
         }
 
         ParhaanLoytaja parhaanLoytaja = new ParhaanLoytaja(sitsit);
-        parhaanLoytaja.optimoiIstumapaikat(sekunnit);
+        parhaanLoytaja.optimoiSukupuoliPaikat(sekunnit);
     }
 
     private static void asetusTiedostoAnnettu(String tiedosto, int sekunnit) {
@@ -78,6 +78,6 @@ public class Main {
         vieTiedostoon(sitsit, "testidata2.sjt");
 
         ParhaanLoytaja parhaanLoytaja = new ParhaanLoytaja(sitsit);
-        parhaanLoytaja.optimoiIstumapaikat(sekunnit);
+        parhaanLoytaja.optimoiSukupuoliPaikat(sekunnit);
     }
 }
