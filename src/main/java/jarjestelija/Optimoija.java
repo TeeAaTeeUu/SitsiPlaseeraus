@@ -1,7 +1,6 @@
 package jarjestelija;
 
 import Pisteyttaja.Pisteet;
-import java.text.DecimalFormat;
 import omatTietorakenteet.ArrayList;
 import omatTietorakenteet.Hakemisto;
 import sitsiplaseeraus.Paikka;
@@ -25,14 +24,11 @@ public class Optimoija {
     private Hakemisto<Paikka, Sitsaaja> vanhatPaikat;
     private final int sitsaajienMaara;
     private boolean muutosOnTapahtunut;
-    private final DecimalFormat dtime;
     private double time;
     private boolean parempiLoytyi;
     private int kuinkaMontaVaihtoa;
     private int vaihtojenMaksimiMaara;
     private int epaOnnistumisia;
-    private SukupuoliJarjestaja sukupuoliJarjestaja;
-    private AlkuSijoittaja alkuSijoittaja;
     private boolean vainParitJaSukupuolet;
 
     /**
@@ -50,11 +46,6 @@ public class Optimoija {
 
         this.sitsaajienMaara = this.sitsit.sitsaajienMaara();
 
-        this.dtime = new DecimalFormat("#.##");
-
-        this.sukupuoliJarjestaja = new SukupuoliJarjestaja(sitsit);
-
-        this.alkuSijoittaja = new AlkuSijoittaja(sitsit);
         this.paikat = new ArrayList<Paikka>();
     }
 
@@ -65,35 +56,25 @@ public class Optimoija {
      * @param sekunttia
      * @return tämän haun parhaan järjestyksen.
      */
-    public Hakemisto<Paikka, Sitsaaja> optimoiIstumapaikat(int sekunttia, boolean vainParitJaSukupuolet) {
-        alustaJuttuja();
+    public Hakemisto<Paikka, Sitsaaja> optimoiIstumapaikat(int sekunttia, long aika, double parhaatPariJaSukupuoliPisteet) {
+        this.aika = aika;
 
-        this.vainParitJaSukupuolet = vainParitJaSukupuolet;
-
-        this.aika = System.currentTimeMillis();
-
-        this.vaihtojenMaksimiMaara = 2;
         long i = 0;
+        
+        this.vaihtojenMaksimiMaara = 2;
+        this.vainParitJaSukupuolet = true;
 
-        while (aika + 1000 * sekunttia > System.currentTimeMillis()) {
-            if (this.kokeileVaihtoa()) {
-                this.epaOnnistumisia = 0;
-            } else {
-                this.epaOnnistumisia++;
-            }
-            if (epaOnnistumisia == sitsaajienMaara * sitsaajienMaara * 10) {
-                if (parempiLoytyi == true) {
-                    do {
-                        vaihdaKaikki();
-                    } while (parempiLoytyi == true);
-                    this.epaOnnistumisia = 0;
-                } else {
-                    this.tulostaLoppuTietoja(i);
-                    return this.vanhatPaikat;
-                }
-            }
-            i++;
-        }
+        do {
+            alustaJuttuja();
+            kokeileVaihtoaLoop(sekunttia, i);
+            System.out.println("vanhassa " + this.getVanhassaPariJaSukupuoliPisteita());
+            System.out.println("parhaassa " + parhaatPariJaSukupuoliPisteet);
+        } while (getVanhassaPariJaSukupuoliPisteita() <= parhaatPariJaSukupuoliPisteet - 10 && 1.0 * (System.currentTimeMillis() - this.aika) / 1000 < sekunttia);
+
+        this.vainParitJaSukupuolet = false;
+
+        kokeileVaihtoaLoop(sekunttia, i);
+
         return this.vanhatPaikat;
     }
 
@@ -103,7 +84,11 @@ public class Optimoija {
      * @return pisteitä tähän mennessä parhaassa.
      */
     protected double getVanhassaPisteita() {
-        return VanhassaPisteita;
+        return VanhassaPisteita; // paripisteitä 160002.40000000002 sukupuolipisteitä 106000.0
+    }
+    
+    public void setVaihtojenMaksimiMaara(int vaihtojenMaksimiMaara) {
+        this.vaihtojenMaksimiMaara = vaihtojenMaksimiMaara;
     }
 
     private boolean kokeileVaihtoa() {
@@ -120,7 +105,9 @@ public class Optimoija {
     }
 
     private void tulostaLoppuTietoja(long kuinkaMontaKokeiltiin) {
-        RandomGenerator.tulostaSitsaajat(this.sitsit);
+        if (this.vainParitJaSukupuolet == false) {
+            RandomGenerator.tulostaSitsaajat(this.sitsit);
+        }
 
         if (vainParitJaSukupuolet) {
             System.out.println(this.pisteet.palautaSukupuoliJaPariPisteet());
@@ -130,7 +117,6 @@ public class Optimoija {
         System.out.println("\n" + "kuinka monta kertaa kokeiltiin paikkojen vaihtoa: " + kuinkaMontaKokeiltiin);
 
         time = 1.0 * (System.currentTimeMillis() - this.aika) / 1000;
-        time = Double.valueOf(dtime.format(time));
         System.out.println((time) + " sekunttia kului ");
     }
 
@@ -140,7 +126,7 @@ public class Optimoija {
         } else {
             this.VanhassaPisteita = this.pisteet.palautaPisteet();
         }
-        
+
         this.vanhatPaikat = this.sitsit.palautaPaikkaSitsaajaParit();
 
     }
@@ -151,10 +137,6 @@ public class Optimoija {
             pisteita = this.pisteet.palautaSukupuoliJaPariPisteet();
         } else {
             pisteita = this.pisteet.palautaPisteet();
-        }
-
-        if (Double.isInfinite(pisteita)) {
-            System.out.println("virhe");
         }
 
         if (pisteita < this.VanhassaPisteita) {
@@ -180,12 +162,15 @@ public class Optimoija {
     }
 
     private void vaihdaKaikki() {
-        System.out.println("ollaan loopissa");
-        this.vaihdaJarjestyksessä();
-        System.out.println("tultiin ulos");
+        System.out.println("käydään kaikki yhdet vaihdot läpi");
+        if (this.vaihdaJarjestyksessa()) {
+            System.out.println("Koska löydettiin parempia, jatketaan.");
+        } else {
+            System.out.println("Koska ei löydetty parempia, aloitetaan alusta.");
+        }
     }
 
-    private void vaihdaJarjestyksessä() {
+    private boolean vaihdaJarjestyksessa() {
         int montakoLoytyi = 0;
         for (Paikka paikka : sitsit.getPaikat()) {
             for (Paikka kohdePaikka : sitsit.getPaikat()) {
@@ -203,17 +188,19 @@ public class Optimoija {
         }
         if (montakoLoytyi == 0) {
             this.parempiLoytyi = false;
+            return false;
+        } else {
+            return true;
         }
     }
 
     private void tulostustaTiedot(Double pisteita) {
         time = 1.0 * (System.currentTimeMillis() - this.aika) / 1000;
 
-        time = Double.valueOf(dtime.format(time));
         System.out.print(pisteita + "\t");
         System.out.print((time) + " sekunttia kulunut ");
-        System.out.print(this.pisteet.getAvecienMaara() + " avecia parina ja " + this.pisteet.getPuolisojenMaara() + " puolisoa parina");
-        System.out.print(" ja " + kuinkaMontaVaihtoa + " vaihtoa tehtiin kun vaihtojenmaksimaara oli " + this.vaihtojenMaksimiMaara);
+        System.out.print(this.pisteet.getAvecienMaara() + " avecja " + this.pisteet.getPuolisojenMaara() + " puolisoja ");
+        System.out.print(kuinkaMontaVaihtoa + " vaihtoja ");
         System.out.println(" paripisteitä " + this.pisteet.getPariPisteet() + " sukupuolipisteitä " + this.pisteet.getSukupuoliPisteet() + " yhteyspisteitä " + this.pisteet.getYhteysPisteet());
     }
 
@@ -225,7 +212,9 @@ public class Optimoija {
 
         this.pisteet.alustaSitsaajat();
 
-        RandomGenerator.tulostaSitsaajat(sitsit);
+        if (this.vainParitJaSukupuolet == false) {
+            RandomGenerator.tulostaSitsaajat(sitsit);
+        }
     }
 
     private void sijoitaAlkupaikat() {
@@ -240,5 +229,32 @@ public class Optimoija {
 
     public Pisteet getPisteet() {
         return pisteet;
+    }
+
+    private boolean kokeileVaihtoaLoop(int sekunttia, long i) {
+        while (aika + 1000 * sekunttia > System.currentTimeMillis()) {
+            if (this.kokeileVaihtoa()) {
+                this.epaOnnistumisia = 0;
+            } else {
+                this.epaOnnistumisia++;
+            }
+            if (epaOnnistumisia == sitsaajienMaara * sitsaajienMaara / 5) {
+                if (parempiLoytyi == true) {
+                    do {
+                        vaihdaKaikki();
+                    } while (parempiLoytyi == true);
+                    this.epaOnnistumisia = 0;
+                } else {
+                    this.tulostaLoppuTietoja(i);
+                    return true;
+                }
+            }
+            i++;
+        }
+        return false;
+    }
+
+    protected double getVanhassaPariJaSukupuoliPisteita() {
+        return pisteet.getPariPisteet() + pisteet.getSukupuoliPisteet();
     }
 }

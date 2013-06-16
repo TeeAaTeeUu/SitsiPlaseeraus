@@ -1,6 +1,6 @@
 package jarjestelija;
 
-import Pisteyttaja.PaikanPisteet;
+//import Pisteyttaja.PaikanPisteet;
 import sitsiplaseeraus.Paikka;
 import sitsiplaseeraus.Sitsaaja;
 import sitsiplaseeraus.Sitsit;
@@ -37,17 +37,17 @@ public class Jarjestaja {
         ekaKohdePaikka = null;
         ekaPaikka = sitsit.getPaikka(Random.luo(sitsit.sitsaajienMaara() - 1));
 
-        double pisteet = PaikanPisteet.tarkistaAvecJaPuoliso(ekaPaikka);
-        if (pisteet > 0) {
-            if (pisteet == 10000.1) {
-                return this.vaihdaParinPaikka(1);
-            } else if (pisteet == 10000.2) {
-                return this.vaihdaParinPaikka(2);
-            } else if (pisteet == 10000.3) {
-                return this.vaihdaParinPaikka(3);
-            }
-            return false;
-        } else {
+//        double pisteet = PaikanPisteet.tarkistaAvecJaPuoliso(ekaPaikka);
+//        if (pisteet > 0) {
+//            if (pisteet == 10000.1) {
+//                return this.vaihdaParinPaikka(1);
+//            } else if (pisteet == 10000.2) {
+//                return this.vaihdaParinPaikka(2);
+//            } else if (pisteet == 10000.3) {
+//                return this.vaihdaParinPaikka(3);
+//            }
+//            return false;
+//        } else {
             do {
                 ekaKohdePaikka = sitsit.getPaikka(Random.luo(sitsit.sitsaajienMaara() - 1));
             } while (ekaPaikka.equals(ekaKohdePaikka)
@@ -55,7 +55,7 @@ public class Jarjestaja {
                     );
 
             return this.vaihdaPaikat();
-        }
+//        }
     }
 
     private boolean vaihdaPaikat() {

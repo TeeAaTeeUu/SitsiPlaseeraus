@@ -138,19 +138,19 @@ public class PaikanPisteet {
         }
     }
 
-    public double tarkistaAvecJaPuoliso() {
-        sukupuoliPisteet = this.tarkistaAvec(this.paikka);
-        if (sukupuoliPisteet == 0.0) {
-            sukupuoliPisteet = this.tarkistaPuoliso(this.paikka);
-            if (sukupuoliPisteet > 0.0) {
+    public double tarkistaAvecJaPuoliso() {       
+        pariPisteet = this.tarkistaAvec(this.paikka);
+        if (pariPisteet == 0.0) {
+            pariPisteet = this.tarkistaPuoliso(this.paikka);
+            if (pariPisteet > 0.0) {
                 setPuoliso();
             }
-            return sukupuoliPisteet;
+            return pariPisteet;
         } else {
-            if (sukupuoliPisteet > 0.0) {
+            if (pariPisteet > 0.0) {
                 setAvec();
             }
-            return sukupuoliPisteet;
+            return pariPisteet;
         }
     }
 
@@ -253,7 +253,6 @@ public class PaikanPisteet {
     }
 
     public double tarkistaYmparillaOlevienSukupuolet() {
-
         int pisteita = 0;
         boolean mies;
 
@@ -386,5 +385,9 @@ public class PaikanPisteet {
             return this.palautaPisteet(arvo, kohteidenErotus, this.paikka.getPaikka());
         }
         return 0.0;
+    }
+
+    void nollaaPisteet() {
+        alustaLuvut();
     }
 }

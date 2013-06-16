@@ -110,10 +110,10 @@ public class RandomGenerator {
      * @return Naisen tai miehen koko nimen
      */
     public String palautaNimi(Boolean mies) {
-        if (mies == false) {
-            return this.nimet.palautaEtunimiNaisen() + " " + this.nimet.palautaSukunimi();
-        } else {
+        if (mies) {
             return this.nimet.palautaEtunimiMiehen() + " " + this.nimet.palautaSukunimi();
+        } else {
+            return this.nimet.palautaEtunimiNaisen() + " " + this.nimet.palautaSukunimi();
         }
     }
 
@@ -141,9 +141,9 @@ public class RandomGenerator {
 
             Sitsaaja sitsaaja;
             if (kumpi == 1) {
-                sitsaaja = new Sitsaaja(this.palautaNimi(true), false);
+                sitsaaja = new Sitsaaja(this.palautaNimi(true), true);
             } else {
-                sitsaaja = new Sitsaaja(this.palautaNimi(false), true);
+                sitsaaja = new Sitsaaja(this.palautaNimi(false), false);
             }
             sitsit.addPaikka().setSitsaaja(sitsaaja);
         }

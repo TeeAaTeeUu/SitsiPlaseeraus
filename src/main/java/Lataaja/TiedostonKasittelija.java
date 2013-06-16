@@ -156,6 +156,7 @@ public class TiedostonKasittelija {
 
             for (int i = 0; i < getPoytienMaara(); i++) {
                 this.poytienKoot.add((int) Integer.parseInt(tiedot[i + 1]));
+                System.out.println(tiedot[i + 1]);
             }
         }
     }

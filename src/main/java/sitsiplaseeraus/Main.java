@@ -27,9 +27,9 @@ public class Main {
         at.asetaPoytienMaara(3);
 
         int[] poytienKoot = new int[3];
-        poytienKoot[0] = 80 / 3;
-        poytienKoot[1] = 80 / 3;
-        poytienKoot[2] = 80 - poytienKoot[0] - poytienKoot[1];
+        poytienKoot[0] = sitsit.sitsaajienMaara() / 3;
+        poytienKoot[1] = sitsit.sitsaajienMaara() / 3;
+        poytienKoot[2] = sitsit.sitsaajienMaara() - poytienKoot[0] - poytienKoot[1];
 
         at.asetaPoytienKoot(poytienKoot);
 
@@ -60,7 +60,8 @@ public class Main {
         
         RandomGenerator random = new RandomGenerator();
 
-        random.taytaRandomDatalla(80, 80 * 10, sitsit);
+        int arvo = 80;
+        random.taytaRandomDatalla(arvo, arvo * arvo / 2, sitsit);
 
         RandomGenerator.tulostaSitsaajat(sitsit);
 
@@ -69,7 +70,7 @@ public class Main {
         }
 
         ParhaanLoytaja parhaanLoytaja = new ParhaanLoytaja(sitsit);
-        parhaanLoytaja.optimoiSukupuoliPaikat(sekunnit);
+        parhaanLoytaja.optimoiIstumapaikat(sekunnit);
     }
 
     private static void asetusTiedostoAnnettu(String tiedosto, int sekunnit) {
@@ -78,6 +79,6 @@ public class Main {
         vieTiedostoon(sitsit, "testidata2.sjt");
 
         ParhaanLoytaja parhaanLoytaja = new ParhaanLoytaja(sitsit);
-        parhaanLoytaja.optimoiSukupuoliPaikat(sekunnit);
+        parhaanLoytaja.optimoiIstumapaikat(sekunnit);
     }
 }

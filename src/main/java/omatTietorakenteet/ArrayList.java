@@ -81,7 +81,7 @@ public class ArrayList<E> implements Iterable<E> {
                     varasto[i] = varasto[i + 1];
             }
             koko--;
-            return vanha;
+            return (E) vanha;
         }
     }
 
@@ -106,12 +106,26 @@ public class ArrayList<E> implements Iterable<E> {
             }
 
             public E next() {
-                return get(paikka++);
+                return (E) get(paikka++);
             }
 
             public void remove() {
                 tama.remove(paikka);
             }
         };
+    }
+
+    /**
+     * Päivittää annetun indexin sisällön.
+     * @param i monesko päivitetään.
+     * @param e mikä laitetaan tilalle.
+     * @return true, index oli kelvollinen.
+     */
+    public boolean update(int i, E e) {
+        if(i >= 0 && i < koko) {
+            varasto[i] = e;
+            return true;
+        }
+        return false;
     }
 }

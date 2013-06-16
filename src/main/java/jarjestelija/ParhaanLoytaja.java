@@ -8,9 +8,12 @@ import sitsiplaseeraus.Sitsit;
 import sitsiplaseeraus.random.RandomGenerator;
 
 /**
- * Toimii paikallisten maksimien hallinoijana, eli aloittaa aina uuden satunnaisen optimoidun paikan haun ja vertaa, josko tämänkertainen olisi parempi kuin edelliset.
- * 
- * Pitää kirjaa parhaasta löydetystä järjestyksestä samalla, kun parempia yritetään löytää tyhjästä alkaen.
+ * Toimii paikallisten maksimien hallinoijana, eli aloittaa aina uuden
+ * satunnaisen optimoidun paikan haun ja vertaa, josko tämänkertainen olisi
+ * parempi kuin edelliset.
+ *
+ * Pitää kirjaa parhaasta löydetystä järjestyksestä samalla, kun parempia
+ * yritetään löytää tyhjästä alkaen.
  */
 public class ParhaanLoytaja {
 
@@ -24,9 +27,12 @@ public class ParhaanLoytaja {
     private Hakemisto<Integer, Sitsaaja> ekatPaikatPoydassa;
     private Hakemisto<Integer, Paikka> kohdePaikat;
     private double ajossaPisteet;
+    private double parhaatPariJaSukupuoliPisteet;
+    private double ajossaParhaatPariJaSukupuoliPisteet;
 
     /**
      * Alustaa olion-käyttöön.
+     *
      * @param sitsit
      */
     public ParhaanLoytaja(Sitsit sitsit) {
@@ -35,23 +41,18 @@ public class ParhaanLoytaja {
         this.parhaatPoydat = new Hakemisto<Integer, Hakemisto>();
         this.ekatPoydat = new Hakemisto<Integer, Hakemisto>();
         this.parhaanPisteet = 0.0;
+        this.parhaatPariJaSukupuoliPisteet = 0.0;
 
         asetaLopetusHook();
     }
 
     /**
-     * Käy annetun ajan verran läpi järjestyksiä, ja lopulta tulostaa parhaan löytämänsä.
+     * Käy annetun ajan verran läpi järjestyksiä, ja lopulta tulostaa parhaan
+     * löytämänsä.
+     *
      * @param sekunttia
      */
     public void optimoiIstumapaikat(int sekunttia) {
-        optimoiIstumapaikat(sekunttia, false);
-    }
-    
-    public void optimoiSukupuoliPaikat(int sekunttia) {
-        optimoiIstumapaikat(sekunttia, true);
-    }
-    
-    private void optimoiIstumapaikat(int sekunttia, boolean pelkatParitJaSukupuolet) {
         this.aika = System.currentTimeMillis();
 
         RandomGenerator.tulostaSitsaajat(sitsit);
@@ -59,8 +60,12 @@ public class ParhaanLoytaja {
         tallennaMuistiin(this.sitsit.palautaPaikkaSitsaajaParit(), this.ekatPoydat);
 
         while (aika + 1000 * sekunttia > System.currentTimeMillis()) {
-            this.ajonParhaatPaikat = optimoija.optimoiIstumapaikat(sekunttia, pelkatParitJaSukupuolet);
+            this.ajonParhaatPaikat = optimoija.optimoiIstumapaikat(sekunttia, aika, parhaatPariJaSukupuoliPisteet);
             this.ajossaPisteet = this.optimoija.getVanhassaPisteita();
+            this.ajossaParhaatPariJaSukupuoliPisteet = this.optimoija.getVanhassaPariJaSukupuoliPisteita();
+            if(this.ajossaParhaatPariJaSukupuoliPisteet > this.parhaatPariJaSukupuoliPisteet - 10) {
+                this.parhaatPariJaSukupuoliPisteet = this.ajossaParhaatPariJaSukupuoliPisteet;
+            }
             if (this.parhaanPisteet < this.ajossaPisteet) {
                 tallennaMuistiin(this.ajonParhaatPaikat, this.parhaatPoydat);
             }
@@ -103,13 +108,17 @@ public class ParhaanLoytaja {
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                palautaEkatPaikat(parhaatPoydat);
-                
-                System.out.println("-- jotain rajaa ---");
+                try {
+                    Thread.sleep(1000);
 
-                RandomGenerator.tulostaSitsaajat(sitsit);
+                    palautaEkatPaikat(parhaatPoydat);
 
-                System.out.println("löydettiin lopulta sellainen, joka sai pisteitä " + parhaanPisteet);
+                    RandomGenerator.tulostaSitsaajat(sitsit);
+
+                    System.out.println("löydettiin lopulta sellainen, joka sai pisteitä " + parhaanPisteet);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
             }
         });
     }

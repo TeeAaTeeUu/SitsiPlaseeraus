@@ -136,6 +136,7 @@ public class Pisteet {
             if (vainSukupuoliJaPariPisteet == false) {
                 this.pisteet += sitsaajanPisteet.palautaPisteet();
             } else {
+                sitsaajanPisteet.nollaaPisteet();
                 this.pisteet += sitsaajanPisteet.tarkistaAvecJaPuoliso();
                 this.pisteet += sitsaajanPisteet.tarkistaYmparillaOlevienSukupuolet();
             }
